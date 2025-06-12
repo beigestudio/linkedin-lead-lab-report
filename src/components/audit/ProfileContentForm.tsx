@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, ChevronRight } from "lucide-react";
+import { Sparkles, ChevronRight, Download, Loader2 } from "lucide-react";
 import { ProfileData } from "@/types/audit";
 import { useToast } from "@/hooks/use-toast";
+import { useLinkedInFetch } from "@/hooks/useLinkedInFetch";
 
 interface ProfileContentFormProps {
   profileData: ProfileData;
@@ -15,6 +16,7 @@ interface ProfileContentFormProps {
 
 export const ProfileContentForm = ({ profileData, onDataChange, onNext }: ProfileContentFormProps) => {
   const { toast } = useToast();
+  const { fetchLinkedInProfile, isLoading } = useLinkedInFetch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +31,29 @@ export const ProfileContentForm = ({ profileData, onDataChange, onNext }: Profil
     onNext();
   };
 
+  const handleFetchLinkedInData = async () => {
+    if (!profileData.linkedinProfile.trim()) {
+      toast({
+        title: "LinkedIn URL required",
+        description: "Please enter your LinkedIn profile URL first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const linkedInData = await fetchLinkedInProfile(profileData.linkedinProfile);
+    
+    if (linkedInData) {
+      onDataChange({
+        ...profileData,
+        name: linkedInData.name || profileData.name,
+        headline: linkedInData.headline || profileData.headline,
+        aboutSection: linkedInData.about || profileData.aboutSection,
+        recentPosts: linkedInData.recentPosts || profileData.recentPosts,
+      });
+    }
+  };
+
   return (
     <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
       <CardHeader className="text-center pb-4 sm:pb-6 px-4 sm:px-6">
@@ -39,11 +64,43 @@ export const ProfileContentForm = ({ profileData, onDataChange, onNext }: Profil
           Now Let's Analyze Your <span className="text-primary font-medium">Profile Content</span>
         </CardTitle>
         <p className="text-muted-foreground text-sm sm:text-lg">
-          Copy and paste your current LinkedIn profile sections for hyper-personalized analysis
+          Enter your LinkedIn URL to auto-fetch your profile, or copy and paste manually
         </p>
       </CardHeader>
       <CardContent className="px-4 sm:px-6">
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+          {/* LinkedIn URL with Auto-Fetch */}
+          <div>
+            <label className="block text-foreground mb-2 sm:mb-3 font-medium text-sm">
+              LinkedIn Profile URL
+            </label>
+            <div className="flex gap-2 sm:gap-3">
+              <Input
+                type="url"
+                placeholder="https://linkedin.com/in/yourprofile"
+                value={profileData.linkedinProfile}
+                onChange={(e) => onDataChange({ ...profileData, linkedinProfile: e.target.value })}
+                className="h-12 sm:h-14 text-sm sm:text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all touch-manipulation flex-1"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleFetchLinkedInData}
+                disabled={isLoading || !profileData.linkedinProfile.trim()}
+                className="h-12 sm:h-14 px-3 sm:px-4 rounded-xl border-border/50 hover:bg-primary/5 touch-manipulation"
+              >
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                ) : (
+                  <Download className="h-4 w-4 sm:h-5 sm:w-5" />
+                )}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              We'll automatically fetch your profile information from LinkedIn
+            </p>
+          </div>
+
           <div>
             <label className="block text-foreground mb-2 sm:mb-3 font-medium text-sm">
               Your Current LinkedIn Headline
