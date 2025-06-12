@@ -91,25 +91,48 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground font-sans;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    /* Prevent horizontal scroll on mobile */
-    overflow-x: hidden;
-    /* Improve touch scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Prevent zoom on double tap for iOS */
-  * {
-    touch-action: manipulation;
-  }
-
-  /* Improve text rendering on mobile */
   html {
+    /* Prevent zoom on iOS */
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* Enable smooth scrolling */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    /* Improve touch scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent zoom on double tap */
+    touch-action: manipulation;
+    /* Fixed positioning for mobile */
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* Prevent zoom on input focus for iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  /* Prevent zoom on double tap for all elements */
+  * {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Improve text rendering */
+  body, input, textarea, button {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
@@ -155,7 +178,7 @@
 
 /* Custom scrollbar for modern theme */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -164,7 +187,7 @@
 
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--primary));
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -238,7 +261,7 @@
     padding-right: env(safe-area-inset-right);
   }
 
-  /* Enhanced hover states for desktop */
+  /* Enhanced hover states for desktop only */
   @media (hover: hover) and (pointer: fine) {
     .desktop-hover\:scale-105:hover {
       transform: scale(1.05);
@@ -372,5 +395,28 @@
     background: white !important;
     color: black !important;
     box-shadow: none !important;
+  }
+}
+
+/* Mobile-specific zoom prevention */
+@media screen and (max-width: 768px) {
+  /* Prevent zoom on focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px !important;
+    transform: scale(1);
+    transition: none;
+  }
+  
+  /* Prevent zoom on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
   }
 }

@@ -110,36 +110,38 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen gradient-bg">
+    <div className="min-h-screen gradient-bg safe-area-top safe-area-bottom">
       {/* Header */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"></div>
-        <div className="container max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 relative">
+        <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 relative">
           <div className="text-center mb-6 sm:mb-8">
             <div className="flex justify-center mb-4 sm:mb-6">
               <div className="relative">
                 <img 
                   src="/lovable-uploads/5715d19c-0a4c-40cc-b66b-2e705f807d4e.png" 
                   alt="Logo" 
-                  className="h-12 sm:h-14 lg:h-16 w-auto animate-float"
+                  className="h-10 sm:h-12 lg:h-14 w-auto animate-float"
                 />
                 <div className="absolute -inset-2 bg-primary/20 rounded-full blur-lg animate-pulse"></div>
               </div>
             </div>
-            <h1 className="text-2xl sm:text-4xl lg:text-6xl font-light text-foreground mb-2 sm:mb-4 tracking-tight">
+            <h1 className="text-xl sm:text-3xl lg:text-5xl font-light text-foreground mb-3 sm:mb-4 tracking-tight px-2">
               LinkedIn Profile <span className="text-primary font-medium">Audit</span>
             </h1>
-            <p className="text-sm sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed px-2">
+            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
               Transform your personal LinkedIn presence into a client-generating machine with expert guidance
             </p>
           </div>
         </div>
       </div>
 
-      <div className="container max-w-5xl mx-auto px-3 sm:px-4 lg:px-6 pb-8 sm:pb-16">
+      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-16 safe-area-bottom">
         {/* Progress Bar */}
         {currentStep > 0 && (
-          <ProgressBar currentStep={currentStep} totalSteps={15} />
+          <div className="mb-6 sm:mb-8">
+            <ProgressBar currentStep={currentStep} totalSteps={15} />
+          </div>
         )}
 
         {/* Welcome Step */}
