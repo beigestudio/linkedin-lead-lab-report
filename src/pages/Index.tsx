@@ -1,12 +1,12 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronRight, CheckCircle, Target, TrendingUp, Users, Calendar, Key, ExternalLink } from "lucide-react";
+import { ChevronRight, CheckCircle, Target, TrendingUp, Users, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProfileAnalysis {
   name: string;
@@ -26,8 +26,7 @@ const Index = () => {
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
-    linkedinProfile: "",
-    openaiKey: ""
+    linkedinProfile: ""
   });
   const [profileAnalysis, setProfileAnalysis] = useState<ProfileAnalysis | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -132,10 +131,10 @@ const Index = () => {
   ];
 
   const analyzeLinkedInProfile = async () => {
-    if (!profileData.name || !profileData.email || !profileData.linkedinProfile || !profileData.openaiKey) {
+    if (!profileData.name || !profileData.email || !profileData.linkedinProfile) {
       toast({
         title: "Missing information",
-        description: "Please fill in all fields including your OpenAI API key.",
+        description: "Please fill in all fields.",
         variant: "destructive",
       });
       return;
@@ -144,49 +143,26 @@ const Index = () => {
     setIsAnalyzing(true);
     
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${profileData.openaiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4',
-          messages: [
-            {
-              role: 'system',
-              content: `You are an expert LinkedIn brand strategist who has audited 500+ executive profiles. Provide a detailed, personalized analysis of this LinkedIn profile focusing on personal branding for lead generation. Be specific, actionable, and direct. Focus on what's missing for client acquisition.`
-            },
-            {
-              role: 'user',
-              content: `Analyze this LinkedIn profile: ${profileData.linkedinProfile}. The user's name is ${profileData.name}. Provide expert feedback on their personal brand positioning, content strategy, and lead generation potential. Be specific about what's working and what needs immediate improvement for attracting high-value clients.`
-            }
-          ],
-          max_tokens: 800,
-          temperature: 0.7,
-        }),
+      const { data, error } = await supabase.functions.invoke('analyze-linkedin-profile', {
+        body: {
+          name: profileData.name,
+          email: profileData.email,
+          linkedinProfile: profileData.linkedinProfile
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to analyze profile');
+      if (error) {
+        throw error;
       }
 
-      const data = await response.json();
-      const analysis = data.choices[0].message.content;
-      
-      setProfileAnalysis({
-        name: profileData.name,
-        email: profileData.email,
-        linkedinProfile: profileData.linkedinProfile,
-        analysis
-      });
-      
+      setProfileAnalysis(data);
       setCurrentStep(2);
       
     } catch (error) {
+      console.error('Profile analysis error:', error);
       toast({
         title: "Analysis failed",
-        description: "Please check your API key and LinkedIn profile URL.",
+        description: "Please check your LinkedIn profile URL and try again.",
         variant: "destructive",
       });
     } finally {
@@ -363,27 +339,6 @@ const Index = () => {
                     className="h-14 text-lg border-gray-700 bg-gray-800 text-white focus:border-blue-500"
                     required
                   />
-                </div>
-                
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <label className="block text-gray-300 mb-2 flex items-center">
-                    <Key className="h-4 w-4 mr-2" />
-                    OpenAI API Key (for profile analysis)
-                  </label>
-                  <Input
-                    type="password"
-                    placeholder="sk-..."
-                    value={profileData.openaiKey}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, openaiKey: e.target.value }))}
-                    className="h-12 border-gray-700 bg-gray-800 text-white focus:border-blue-500"
-                    required
-                  />
-                  <p className="text-xs text-gray-400 mt-2">
-                    Your API key is stored locally and used only for this analysis. 
-                    <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">
-                      Get your API key here <ExternalLink className="h-3 w-3 inline" />
-                    </a>
-                  </p>
                 </div>
                 
                 <Button 
