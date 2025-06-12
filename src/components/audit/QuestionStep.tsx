@@ -9,10 +9,11 @@ interface QuestionStepProps {
   questionIndex: number;
   totalQuestions: number;
   answer: Answer | undefined;
+  selectedOption?: string | null;
   onAnswer: (answer: string) => void;
 }
 
-export const QuestionStep = ({ question, questionIndex, totalQuestions, answer, onAnswer }: QuestionStepProps) => {
+export const QuestionStep = ({ question, questionIndex, totalQuestions, answer, selectedOption, onAnswer }: QuestionStepProps) => {
   return (
     <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
       <CardHeader className="pb-4 sm:pb-6 px-4 sm:px-6">
@@ -30,21 +31,29 @@ export const QuestionStep = ({ question, questionIndex, totalQuestions, answer, 
       </CardHeader>
       <CardContent className="px-4 sm:px-6">
         <div className="space-y-3 sm:space-y-4">
-          {question.options.map((option, index) => (
-            <Button
-              key={index}
-              variant="outline"
-              className="w-full h-auto p-4 sm:p-6 text-left justify-start text-sm sm:text-lg hover:bg-primary/5 hover:border-primary/30 transition-all rounded-xl border-border/50 bg-background/30 backdrop-blur-sm touch-manipulation min-h-[56px]"
-              onClick={() => onAnswer(option)}
-            >
-              <div className="flex items-center w-full">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3 sm:mr-4 text-xs sm:text-sm font-medium text-primary border border-primary/20 flex-shrink-0">
-                  {String.fromCharCode(65 + index)}
+          {question.options.map((option, index) => {
+            const isSelected = selectedOption === option;
+            return (
+              <Button
+                key={index}
+                variant="outline"
+                className={`w-full h-auto p-4 sm:p-6 text-left justify-start text-sm sm:text-lg hover:bg-primary/5 hover:border-primary/30 transition-all rounded-xl border-border/50 bg-background/30 backdrop-blur-sm touch-manipulation min-h-[56px] ${
+                  isSelected ? 'bg-primary/10 border-primary/50 ring-2 ring-primary/20' : ''
+                }`}
+                onClick={() => onAnswer(option)}
+                disabled={!!selectedOption}
+              >
+                <div className="flex items-center w-full">
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3 sm:mr-4 text-xs sm:text-sm font-medium text-primary border border-primary/20 flex-shrink-0 ${
+                    isSelected ? 'bg-primary text-primary-foreground border-primary' : ''
+                  }`}>
+                    {isSelected ? <CheckCircle className="h-4 w-4" /> : String.fromCharCode(65 + index)}
+                  </div>
+                  <span className="text-left leading-relaxed">{option}</span>
                 </div>
-                <span className="text-left leading-relaxed">{option}</span>
-              </div>
-            </Button>
-          ))}
+              </Button>
+            );
+          })}
         </div>
         
         {answer && (

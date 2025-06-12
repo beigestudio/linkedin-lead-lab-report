@@ -32,6 +32,7 @@ const Index = () => {
   const [openTextAnswer, setOpenTextAnswer] = useState("");
   const [hyperPersonalizedAnalysis, setHyperPersonalizedAnalysis] = useState<HyperPersonalizedAnalysis | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const { toast } = useToast();
 
   const generateHyperPersonalizedAnalysis = async () => {
@@ -66,6 +67,15 @@ const Index = () => {
   };
 
   const handleAnswer = (questionIndex: number, answer: string) => {
+    // Set selected option for visual feedback
+    setSelectedOption(answer);
+    
+    // Safety check to ensure we don't go beyond available questions
+    if (questionIndex >= questions.length) {
+      console.error('Question index out of bounds:', questionIndex);
+      return;
+    }
+
     const question = questions[questionIndex];
     const feedback = question.feedback[answer as keyof typeof question.feedback];
     
@@ -80,9 +90,15 @@ const Index = () => {
     setAnswers(updatedAnswers);
 
     setTimeout(() => {
+      // Clear selected option
+      setSelectedOption(null);
+      
+      // Fixed step navigation logic - properly move to next question
       if (questionIndex < questions.length - 1) {
-        setCurrentStep(questionIndex + 4);
+        // Move to next question (questions start at step 3, so next question is current step + 1)
+        setCurrentStep(currentStep + 1);
       } else {
+        // All questions answered, move to final question step
         setCurrentStep(12);
       }
     }, 2000);
@@ -156,6 +172,7 @@ const Index = () => {
             questionIndex={currentStep - 3}
             totalQuestions={10}
             answer={answers[currentStep - 3]}
+            selectedOption={selectedOption}
             onAnswer={(answer) => handleAnswer(currentStep - 3, answer)}
           />
         )}
