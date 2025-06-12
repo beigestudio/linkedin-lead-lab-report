@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -228,23 +229,23 @@ const Index = () => {
     <div className="min-h-screen gradient-bg">
       {/* Modern Header with Logo */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20"></div>
-        <div className="container max-w-6xl mx-auto px-4 py-12 relative">
-          <div className="text-center mb-12">
-            <div className="flex justify-center mb-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"></div>
+        <div className="container max-w-6xl mx-auto px-4 py-8 relative">
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-6">
               <div className="relative">
                 <img 
                   src="/lovable-uploads/5715d19c-0a4c-40cc-b66b-2e705f807d4e.png" 
                   alt="Logo" 
-                  className="h-24 w-auto animate-float"
+                  className="h-16 w-auto animate-float"
                 />
-                <div className="absolute -inset-4 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+                <div className="absolute -inset-2 bg-primary/20 rounded-full blur-lg animate-pulse"></div>
               </div>
             </div>
-            <h1 className="text-5xl md:text-7xl font-light text-foreground mb-6 tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-light text-foreground mb-4 tracking-tight">
               LinkedIn Profile <span className="text-primary font-medium">Audit</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Transform your personal LinkedIn presence into a client-generating machine with expert guidance
             </p>
           </div>
@@ -267,9 +268,9 @@ const Index = () => {
 
         {/* Welcome Step */}
         {currentStep === 0 && (
-          <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+          <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="pb-8 text-center">
-              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm">
+              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm border border-primary/20">
                 <Target className="h-12 w-12 text-primary" />
               </div>
               <CardTitle className="text-4xl md:text-5xl font-light mb-6 leading-tight">
@@ -282,36 +283,36 @@ const Index = () => {
               </p>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="bg-gradient-to-r from-primary/90 to-accent/90 rounded-3xl p-8 text-primary-foreground mb-10 backdrop-blur-sm">
+              <div className="bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl p-8 text-foreground mb-10 backdrop-blur-sm border border-primary/20">
                 <div className="flex items-center justify-center mb-6">
-                  <Sparkles className="h-8 w-8 mr-3" />
+                  <Sparkles className="h-8 w-8 mr-3 text-primary" />
                   <h3 className="text-2xl font-medium">What You'll Discover</h3>
                 </div>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div className="text-center">
-                    <div className="bg-white/20 rounded-2xl p-4 mb-4 backdrop-blur-sm">
-                      <CheckCircle className="h-8 w-8 mx-auto" />
+                    <div className="bg-primary/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-primary/30">
+                      <CheckCircle className="h-8 w-8 mx-auto text-primary" />
                     </div>
-                    <h4 className="font-semibold mb-2">Expert Analysis</h4>
-                    <p className="text-primary-foreground/90 text-sm leading-relaxed">
+                    <h4 className="font-semibold mb-2 text-foreground">Expert Analysis</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       Personalized feedback from a strategist who's audited 500+ executive profiles
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-white/20 rounded-2xl p-4 mb-4 backdrop-blur-sm">
-                      <TrendingUp className="h-8 w-8 mx-auto" />
+                    <div className="bg-primary/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-primary/30">
+                      <TrendingUp className="h-8 w-8 mx-auto text-primary" />
                     </div>
-                    <h4 className="font-semibold mb-2">Actionable Roadmap</h4>
-                    <p className="text-primary-foreground/90 text-sm leading-relaxed">
+                    <h4 className="font-semibold mb-2 text-foreground">Actionable Roadmap</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       Clear steps to start generating qualified leads from your profile today
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-white/20 rounded-2xl p-4 mb-4 backdrop-blur-sm">
-                      <Users className="h-8 w-8 mx-auto" />
+                    <div className="bg-primary/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-primary/30">
+                      <Users className="h-8 w-8 mx-auto text-primary" />
                     </div>
-                    <h4 className="font-semibold mb-2">Personal Brand Focus</h4>
-                    <p className="text-primary-foreground/90 text-sm leading-relaxed">
+                    <h4 className="font-semibold mb-2 text-foreground">Personal Brand Focus</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       Strategies for executives to attract high-value prospects through personal branding
                     </p>
                   </div>
@@ -336,9 +337,9 @@ const Index = () => {
 
         {/* Profile Analysis Step */}
         {currentStep === 1 && (
-          <Card className="max-w-3xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+          <Card className="max-w-3xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="text-center pb-6">
-              <div className="mx-auto mb-6 p-4 bg-gradient-to-br from-primary/30 to-accent/30 rounded-2xl w-20 h-20 flex items-center justify-center backdrop-blur-sm">
+              <div className="mx-auto mb-6 p-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl w-20 h-20 flex items-center justify-center backdrop-blur-sm border border-primary/20">
                 <User className="h-10 w-10 text-primary" />
               </div>
               <CardTitle className="text-3xl font-light text-foreground mb-3">
@@ -468,7 +469,7 @@ const Index = () => {
 
         {/* Profile Analysis Results */}
         {currentStep === 2 && profileAnalysis && (
-          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="pb-6">
               <CardTitle className="text-4xl font-light mb-3">
                 Your Personal LinkedIn <span className="text-primary font-medium">Brand Analysis</span>
@@ -504,10 +505,10 @@ const Index = () => {
 
         {/* Questions 1-9 */}
         {currentStep >= 3 && currentStep <= 11 && (
-          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="pb-6">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full">
+                <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
                   Question {currentStep - 2} of 10
                 </span>
                 <div className="text-sm text-muted-foreground">
@@ -528,7 +529,7 @@ const Index = () => {
                     onClick={() => handleAnswer(currentStep - 3, option)}
                   >
                     <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-4 text-sm font-medium text-primary">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-4 text-sm font-medium text-primary border border-primary/20">
                         {String.fromCharCode(65 + index)}
                       </div>
                       {option}
@@ -555,10 +556,10 @@ const Index = () => {
 
         {/* Question 10 - Open Text */}
         {currentStep === 12 && (
-          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="pb-6">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full">
+                <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
                   Question 10 of 10
                 </span>
                 <div className="text-sm text-muted-foreground">
@@ -592,10 +593,10 @@ const Index = () => {
 
         {/* Final CTA */}
         {currentStep === 13 && (
-          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="text-center pb-8">
-              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-green-500/30 to-primary/30 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm animate-pulse">
-                <CheckCircle className="h-12 w-12 text-green-600" />
+              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-green-500/20 to-primary/20 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm animate-pulse border border-green-500/20">
+                <CheckCircle className="h-12 w-12 text-green-400" />
               </div>
               <CardTitle className="text-4xl md:text-5xl font-light mb-6 leading-tight">
                 Your Personal LinkedIn Brand Can Generate 
@@ -607,40 +608,40 @@ const Index = () => {
               </p>
             </CardHeader>
             <CardContent className="text-center">
-              <div className="bg-gradient-to-r from-primary/90 to-accent/90 rounded-3xl p-10 text-primary-foreground mb-10 backdrop-blur-sm">
+              <div className="bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl p-10 text-foreground mb-10 backdrop-blur-sm border border-primary/20">
                 <div className="flex items-center justify-center mb-6">
-                  <Sparkles className="h-8 w-8 mr-3" />
+                  <Sparkles className="h-8 w-8 mr-3 text-primary" />
                   <h3 className="text-3xl font-medium">Complete Personal Brand Transformation</h3>
                 </div>
-                <p className="text-xl text-primary-foreground/90 mb-8 leading-relaxed">
+                <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
                   Get a comprehensive personal brand audit, custom strategy roadmap, and 1:1 implementation plan 
                   designed specifically for your business and ideal clients.
                 </p>
                 <div className="grid md:grid-cols-3 gap-8">
                   <div className="text-center">
-                    <div className="bg-white/20 rounded-2xl p-6 mb-4 backdrop-blur-sm">
-                      <User className="h-10 w-10 mx-auto" />
+                    <div className="bg-primary/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-primary/30">
+                      <User className="h-10 w-10 mx-auto text-primary" />
                     </div>
                     <h4 className="font-semibold text-xl mb-3">Profile Optimization</h4>
-                    <p className="text-primary-foreground/90 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       Complete headline, About section, and visual brand overhaul for maximum client attraction
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-white/20 rounded-2xl p-6 mb-4 backdrop-blur-sm">
-                      <TrendingUp className="h-10 w-10 mx-auto" />
+                    <div className="bg-primary/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-primary/30">
+                      <TrendingUp className="h-10 w-10 mx-auto text-primary" />
                     </div>
                     <h4 className="font-semibold text-xl mb-3">Content Strategy</h4>
-                    <p className="text-primary-foreground/90 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       30-day content calendar with proven hooks, stories, and CTAs that convert prospects to calls
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-white/20 rounded-2xl p-6 mb-4 backdrop-blur-sm">
-                      <Target className="h-10 w-10 mx-auto" />
+                    <div className="bg-primary/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-primary/30">
+                      <Target className="h-10 w-10 mx-auto text-primary" />
                     </div>
                     <h4 className="font-semibold text-xl mb-3">Lead Gen System</h4>
-                    <p className="text-primary-foreground/90 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       Outreach templates, conversation frameworks, and follow-up sequences that book qualified discovery calls
                     </p>
                   </div>
@@ -665,15 +666,15 @@ const Index = () => {
               
               <div className="grid md:grid-cols-3 gap-4 text-center text-sm text-muted-foreground">
                 <div className="flex items-center justify-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-green-400" />
                   Free 15-minute consultation
                 </div>
                 <div className="flex items-center justify-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-green-400" />
                   Custom strategy discussion
                 </div>
                 <div className="flex items-center justify-center">
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-green-400" />
                   No-obligation session
                 </div>
               </div>
