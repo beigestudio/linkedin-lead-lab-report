@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -138,6 +137,15 @@ const Index = () => {
   ];
 
   const analyzeLinkedInProfile = async () => {
+    if (!profileData.name || !profileData.email || !profileData.linkedinProfile || !profileData.whatDoYouDo || !profileData.targetAudience || !profileData.mainLinkedInGoal) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Normalize LinkedIn URL
     let linkedinUrl = profileData.linkedinProfile.trim();
     if (!linkedinUrl.startsWith('http://') && !linkedinUrl.startsWith('https://')) {
@@ -163,27 +171,15 @@ const Index = () => {
       }
 
       setProfileAnalysis(data);
-      setCurrentStep(14); // Go to profile analysis results
+      setCurrentStep(2);
       
     } catch (error) {
       console.error('Profile analysis error:', error);
       toast({
-        title: "Analysis completed with general insights",
-        description: "We've provided general LinkedIn optimization insights based on your information.",
-        variant: "default",
+        title: "Analysis failed",
+        description: "Please check your LinkedIn profile URL and try again.",
+        variant: "destructive",
       });
-      
-      // Create a general analysis based on the profile data
-      setProfileAnalysis({
-        name: profileData.name,
-        email: profileData.email,
-        linkedinProfile: linkedinUrl,
-        whatDoYouDo: profileData.whatDoYouDo,
-        targetAudience: profileData.targetAudience,
-        mainLinkedInGoal: profileData.mainLinkedInGoal,
-        analysis: `Based on your information as an ${profileData.whatDoYouDo} targeting ${profileData.targetAudience} with the goal to ${profileData.mainLinkedInGoal}, here are key insights:\n\n• Profile Optimization: Ensure your headline clearly states how you help ${profileData.targetAudience} achieve specific outcomes\n• Content Strategy: Share insights about your industry that would resonate with ${profileData.targetAudience}\n• Engagement: Actively comment on posts from your target audience to build relationships\n• Lead Generation: Use strategic CTAs in your posts to encourage ${profileData.targetAudience} to reach out\n• Authority Building: Position yourself as the go-to expert for ${profileData.targetAudience} in your field\n\nYour LinkedIn profile has great potential to ${profileData.mainLinkedInGoal} when optimized with the right strategy.`
-      });
-      setCurrentStep(14);
     } finally {
       setIsAnalyzing(false);
     }
@@ -191,15 +187,7 @@ const Index = () => {
 
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profileData.name || !profileData.email || !profileData.linkedinProfile || !profileData.whatDoYouDo || !profileData.targetAudience || !profileData.mainLinkedInGoal) {
-      toast({
-        title: "Missing information",
-        description: "Please fill in all fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-    setCurrentStep(2); // Go directly to questions, skip profile analysis
+    analyzeLinkedInProfile();
   };
 
   const handleAnswer = (questionIndex: number, answer: string) => {
@@ -237,31 +225,32 @@ const Index = () => {
       return;
     }
     
-    setCurrentStep(13); // Go to analyzing step
+    setCurrentStep(13); // Go to CTA
   };
 
-  const progressPercentage = ((currentStep) / 15) * 100;
+  const progressPercentage = ((currentStep) / 13) * 100;
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen gradient-bg">
       {/* Modern Header with Logo */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-amber-300/5"></div>
-        <div className="container max-w-6xl mx-auto px-4 py-6 relative">
-          <div className="text-center mb-6">
-            <div className="flex justify-center mb-4">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"></div>
+        <div className="container max-w-6xl mx-auto px-4 py-8 relative">
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-6">
               <div className="relative">
                 <img 
                   src="/lovable-uploads/5715d19c-0a4c-40cc-b66b-2e705f807d4e.png" 
                   alt="Logo" 
-                  className="h-12 w-auto"
+                  className="h-16 w-auto animate-float"
                 />
+                <div className="absolute -inset-2 bg-primary/20 rounded-full blur-lg animate-pulse"></div>
               </div>
             </div>
-            <h1 className="text-3xl md:text-5xl font-light text-white mb-3 tracking-tight">
-              LinkedIn Profile <span className="text-amber-400 font-medium">Audit</span>
+            <h1 className="text-4xl md:text-6xl font-light text-foreground mb-4 tracking-tight">
+              LinkedIn Profile <span className="text-primary font-medium">Audit</span>
             </h1>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Transform your personal LinkedIn presence into a client-generating machine with expert guidance
             </p>
           </div>
@@ -272,11 +261,11 @@ const Index = () => {
         {/* Modern Progress Bar */}
         {currentStep > 0 && (
           <div className="mb-12">
-            <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-800">
+            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border/50">
               <Progress value={progressPercentage} className="h-3 mb-4" />
-              <div className="flex justify-between items-center text-sm text-gray-400">
+              <div className="flex justify-between items-center text-sm text-muted-foreground">
                 <span>Progress</span>
-                <span className="font-medium">Step {Math.min(currentStep, 15)} of 15</span>
+                <span className="font-medium">Step {Math.min(currentStep, 13)} of 13</span>
               </div>
             </div>
           </div>
@@ -284,51 +273,51 @@ const Index = () => {
 
         {/* Welcome Step */}
         {currentStep === 0 && (
-          <Card className="border-0 shadow-2xl bg-gray-900/80 backdrop-blur-sm border border-gray-800">
+          <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="pb-8 text-center">
-              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-amber-500/20 to-amber-300/20 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm border border-amber-500/20">
-                <Target className="h-12 w-12 text-amber-400" />
+              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm border border-primary/20">
+                <Target className="h-12 w-12 text-primary" />
               </div>
-              <CardTitle className="text-4xl md:text-5xl font-light mb-6 leading-tight text-white">
+              <CardTitle className="text-4xl md:text-5xl font-light mb-6 leading-tight">
                 Is Your Personal LinkedIn Profile 
-                <span className="block text-amber-400 font-medium">Actually Working?</span>
+                <span className="block text-primary font-medium">Actually Working?</span>
               </CardTitle>
-              <p className="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-4xl mx-auto">
                 Most founders and C-suite executives post on LinkedIn but don't get qualified clients. 
                 Let's discover why with a comprehensive, expert-level personal brand audit.
               </p>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="bg-gradient-to-r from-amber-500/20 to-amber-300/20 rounded-3xl p-8 text-white mb-10 backdrop-blur-sm border border-amber-500/20">
+              <div className="bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl p-8 text-foreground mb-10 backdrop-blur-sm border border-primary/20">
                 <div className="flex items-center justify-center mb-6">
-                  <Sparkles className="h-8 w-8 mr-3 text-amber-400" />
+                  <Sparkles className="h-8 w-8 mr-3 text-primary" />
                   <h3 className="text-2xl font-medium">What You'll Discover</h3>
                 </div>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div className="text-center">
-                    <div className="bg-amber-500/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-amber-500/30">
-                      <CheckCircle className="h-8 w-8 mx-auto text-amber-400" />
+                    <div className="bg-primary/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-primary/30">
+                      <CheckCircle className="h-8 w-8 mx-auto text-primary" />
                     </div>
-                    <h4 className="font-semibold mb-2 text-white">Expert Analysis</h4>
-                    <p className="text-gray-300 text-sm leading-relaxed">
+                    <h4 className="font-semibold mb-2 text-foreground">Expert Analysis</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       Personalized feedback from a strategist who's audited 500+ executive profiles
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-amber-500/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-amber-500/30">
-                      <TrendingUp className="h-8 w-8 mx-auto text-amber-400" />
+                    <div className="bg-primary/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-primary/30">
+                      <TrendingUp className="h-8 w-8 mx-auto text-primary" />
                     </div>
-                    <h4 className="font-semibold mb-2 text-white">Actionable Roadmap</h4>
-                    <p className="text-gray-300 text-sm leading-relaxed">
+                    <h4 className="font-semibold mb-2 text-foreground">Actionable Roadmap</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       Clear steps to start generating qualified leads from your profile today
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-amber-500/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-amber-500/30">
-                      <Users className="h-8 w-8 mx-auto text-amber-400" />
+                    <div className="bg-primary/20 rounded-2xl p-4 mb-4 backdrop-blur-sm border border-primary/30">
+                      <Users className="h-8 w-8 mx-auto text-primary" />
                     </div>
-                    <h4 className="font-semibold mb-2 text-white">Personal Brand Focus</h4>
-                    <p className="text-gray-300 text-sm leading-relaxed">
+                    <h4 className="font-semibold mb-2 text-foreground">Personal Brand Focus</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       Strategies for executives to attract high-value prospects through personal branding
                     </p>
                   </div>
@@ -338,12 +327,12 @@ const Index = () => {
                 <Button 
                   onClick={() => setCurrentStep(1)} 
                   size="lg"
-                  className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black px-12 py-6 text-lg font-medium rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                  className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground px-12 py-6 text-lg font-medium rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
                 >
                   Start My Free LinkedIn Audit
                   <ChevronRight className="ml-3 h-6 w-6" />
                 </Button>
-                <p className="text-sm text-gray-400 mt-6">
+                <p className="text-sm text-muted-foreground mt-6">
                   ✨ Takes 3 minutes • Get instant expert feedback
                 </p>
               </div>
@@ -351,26 +340,26 @@ const Index = () => {
           </Card>
         )}
 
-        {/* Profile Data Collection Step */}
+        {/* Profile Analysis Step */}
         {currentStep === 1 && (
-          <Card className="max-w-3xl mx-auto border-0 shadow-2xl bg-gray-900/80 backdrop-blur-sm border border-gray-800">
+          <Card className="max-w-3xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="text-center pb-6">
-              <div className="mx-auto mb-6 p-4 bg-gradient-to-br from-amber-500/20 to-amber-300/20 rounded-2xl w-20 h-20 flex items-center justify-center backdrop-blur-sm border border-amber-500/20">
-                <User className="h-10 w-10 text-amber-400" />
+              <div className="mx-auto mb-6 p-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl w-20 h-20 flex items-center justify-center backdrop-blur-sm border border-primary/20">
+                <User className="h-10 w-10 text-primary" />
               </div>
-              <CardTitle className="text-3xl font-light text-white mb-3">
-                Tell Us About <span className="text-amber-400 font-medium">Your Profile</span>
+              <CardTitle className="text-3xl font-light text-foreground mb-3">
+                Get Your Free <span className="text-primary font-medium">LinkedIn Audit</span>
               </CardTitle>
-              <p className="text-gray-300 text-lg">
-                We'll use this information for your comprehensive audit
+              <p className="text-muted-foreground text-lg">
+                Discover what's blocking you from attracting high-quality clients
               </p>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleProfileSubmit} className="space-y-8">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-white mb-3 font-medium flex items-center text-sm">
-                      <User className="h-4 w-4 mr-2 text-amber-400" />
+                    <label className="block text-foreground mb-3 font-medium flex items-center text-sm">
+                      <User className="h-4 w-4 mr-2 text-primary" />
                       Your Name
                     </label>
                     <Input
@@ -378,14 +367,14 @@ const Index = () => {
                       placeholder="e.g., Akshara"
                       value={profileData.name}
                       onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
-                      className="h-14 text-base rounded-xl border-gray-700 bg-gray-800/50 backdrop-blur-sm focus:bg-gray-800 transition-all text-white"
+                      className="h-14 text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all"
                       required
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-white mb-3 font-medium flex items-center text-sm">
-                      <Mail className="h-4 w-4 mr-2 text-amber-400" />
+                    <label className="block text-foreground mb-3 font-medium flex items-center text-sm">
+                      <Mail className="h-4 w-4 mr-2 text-primary" />
                       Your Email
                     </label>
                     <Input
@@ -393,15 +382,15 @@ const Index = () => {
                       placeholder="yourname@example.com"
                       value={profileData.email}
                       onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                      className="h-14 text-base rounded-xl border-gray-700 bg-gray-800/50 backdrop-blur-sm focus:bg-gray-800 transition-all text-white"
+                      className="h-14 text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all"
                       required
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <label className="block text-white mb-3 font-medium flex items-center text-sm">
-                    <Link className="h-4 w-4 mr-2 text-amber-400" />
+                  <label className="block text-foreground mb-3 font-medium flex items-center text-sm">
+                    <Link className="h-4 w-4 mr-2 text-primary" />
                     LinkedIn Profile URL
                   </label>
                   <Input
@@ -409,18 +398,18 @@ const Index = () => {
                     placeholder="linkedin.com/in/yourname or www.linkedin.com/in/yourname"
                     value={profileData.linkedinProfile}
                     onChange={(e) => setProfileData(prev => ({ ...prev, linkedinProfile: e.target.value }))}
-                    className="h-14 text-base rounded-xl border-gray-700 bg-gray-800/50 backdrop-blur-sm focus:bg-gray-800 transition-all text-white"
+                    className="h-14 text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all"
                     required
                   />
-                  <p className="text-xs text-gray-400 mt-2">
+                  <p className="text-xs text-muted-foreground mt-2">
                     You can paste with or without https:// - we'll handle it automatically
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-white mb-3 font-medium flex items-center text-sm">
-                      <Briefcase className="h-4 w-4 mr-2 text-amber-400" />
+                    <label className="block text-foreground mb-3 font-medium flex items-center text-sm">
+                      <Briefcase className="h-4 w-4 mr-2 text-primary" />
                       What do you do?
                     </label>
                     <Input
@@ -428,14 +417,14 @@ const Index = () => {
                       placeholder="e.g., Founder of a SaaS startup"
                       value={profileData.whatDoYouDo}
                       onChange={(e) => setProfileData(prev => ({ ...prev, whatDoYouDo: e.target.value }))}
-                      className="h-14 text-base rounded-xl border-gray-700 bg-gray-800/50 backdrop-blur-sm focus:bg-gray-800 transition-all text-white"
+                      className="h-14 text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-white mb-3 font-medium flex items-center text-sm">
-                      <UserCheck className="h-4 w-4 mr-2 text-amber-400" />
+                    <label className="block text-foreground mb-3 font-medium flex items-center text-sm">
+                      <UserCheck className="h-4 w-4 mr-2 text-primary" />
                       Target Audience
                     </label>
                     <Input
@@ -443,15 +432,15 @@ const Index = () => {
                       placeholder="e.g., CMOs, founders, coaches"
                       value={profileData.targetAudience}
                       onChange={(e) => setProfileData(prev => ({ ...prev, targetAudience: e.target.value }))}
-                      className="h-14 text-base rounded-xl border-gray-700 bg-gray-800/50 backdrop-blur-sm focus:bg-gray-800 transition-all text-white"
+                      className="h-14 text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-white mb-3 font-medium flex items-center text-sm">
-                    <Star className="h-4 w-4 mr-2 text-amber-400" />
+                  <label className="block text-foreground mb-3 font-medium flex items-center text-sm">
+                    <Star className="h-4 w-4 mr-2 text-primary" />
                     Main LinkedIn Goal
                   </label>
                   <Input
@@ -459,50 +448,96 @@ const Index = () => {
                     placeholder="e.g., Generate leads, Build authority"
                     value={profileData.mainLinkedInGoal}
                     onChange={(e) => setProfileData(prev => ({ ...prev, mainLinkedInGoal: e.target.value }))}
-                    className="h-14 text-base rounded-xl border-gray-700 bg-gray-800/50 backdrop-blur-sm focus:bg-gray-800 transition-all text-white"
+                    className="h-14 text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all"
                     required
                   />
                 </div>
                 
                 <Button 
                   type="submit" 
-                  className="w-full h-16 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                  disabled={isAnalyzing}
+                  className="w-full h-16 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
                 >
-                  Continue to Audit Questions
-                  <ChevronRight className="ml-3 h-5 w-5" />
+                  {isAnalyzing ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-3"></div>
+                      Analyzing Your Profile...
+                    </>
+                  ) : (
+                    <>
+                      Get My Free LinkedIn Audit
+                      <ChevronRight className="ml-3 h-5 w-5" />
+                    </>
+                  )}
                 </Button>
               </form>
             </CardContent>
           </Card>
         )}
 
-        {/* Questions 1-9 */}
-        {currentStep >= 2 && currentStep <= 10 && (
-          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-gray-900/80 backdrop-blur-sm border border-gray-800">
+        {/* Profile Analysis Results */}
+        {currentStep === 2 && profileAnalysis && (
+          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="pb-6">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-medium text-amber-400 bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20">
-                  Question {currentStep - 1} of 10
-                </span>
-                <div className="text-sm text-gray-400">
-                  {Math.round(((currentStep - 1) / 10) * 100)}% Complete
+              <CardTitle className="text-4xl font-light mb-3">
+                Your Personal LinkedIn <span className="text-primary font-medium">Brand Analysis</span>
+              </CardTitle>
+              <p className="text-muted-foreground text-lg">
+                Expert feedback on {profileAnalysis.name}'s LinkedIn personal brand
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-primary/5 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-border/30">
+                <div className="prose prose-foreground max-w-none">
+                  <div className="whitespace-pre-wrap text-foreground leading-relaxed text-lg">
+                    {profileAnalysis.analysis}
+                  </div>
                 </div>
               </div>
-              <CardTitle className="text-2xl font-light mb-4 text-white">
-                {questions[currentStep - 2].question}
+              
+              <div className="text-center">
+                <p className="text-muted-foreground mb-8 text-lg">
+                  Ready to take your personal LinkedIn brand to the next level? Let's dive deeper with our comprehensive audit.
+                </p>
+                <Button 
+                  onClick={() => setCurrentStep(3)}
+                  className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 px-10 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                >
+                  Continue to Detailed Audit
+                  <ChevronRight className="ml-3 h-5 w-5" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Questions 1-9 */}
+        {currentStep >= 3 && currentStep <= 11 && (
+          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
+            <CardHeader className="pb-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+                  Question {currentStep - 2} of 10
+                </span>
+                <div className="text-sm text-muted-foreground">
+                  {Math.round(((currentStep - 2) / 10) * 100)}% Complete
+                </div>
+              </div>
+              <CardTitle className="text-2xl font-light mb-4">
+                {questions[currentStep - 3].question}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {questions[currentStep - 2].options.map((option, index) => (
+                {questions[currentStep - 3].options.map((option, index) => (
                   <Button
                     key={index}
                     variant="outline"
-                    className="w-full h-auto p-6 text-left justify-start text-lg hover:bg-amber-500/5 hover:border-amber-500/30 transition-all rounded-xl border-gray-700 bg-gray-800/30 backdrop-blur-sm text-white"
-                    onClick={() => handleAnswer(currentStep - 2, option)}
+                    className="w-full h-auto p-6 text-left justify-start text-lg hover:bg-primary/5 hover:border-primary/30 transition-all rounded-xl border-border/50 bg-background/30 backdrop-blur-sm"
+                    onClick={() => handleAnswer(currentStep - 3, option)}
                   >
                     <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center mr-4 text-sm font-medium text-amber-400 border border-amber-500/20">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-4 text-sm font-medium text-primary border border-primary/20">
                         {String.fromCharCode(65 + index)}
                       </div>
                       {option}
@@ -512,14 +547,14 @@ const Index = () => {
               </div>
               
               {/* Show feedback if answer is selected */}
-              {answers[currentStep - 2] && (
-                <div className="mt-8 p-6 bg-gradient-to-br from-amber-500/10 via-amber-300/5 to-amber-500/5 rounded-2xl border border-amber-500/20 backdrop-blur-sm">
-                  <h4 className="font-semibold text-amber-400 mb-3 flex items-center text-lg">
+              {answers[currentStep - 3] && (
+                <div className="mt-8 p-6 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/5 rounded-2xl border border-primary/20 backdrop-blur-sm">
+                  <h4 className="font-semibold text-primary mb-3 flex items-center text-lg">
                     <CheckCircle className="h-6 w-6 mr-3" />
                     Expert Feedback
                   </h4>
-                  <p className="text-white leading-relaxed">
-                    {answers[currentStep - 2].feedback}
+                  <p className="text-foreground leading-relaxed">
+                    {answers[currentStep - 3].feedback}
                   </p>
                 </div>
               )}
@@ -528,18 +563,18 @@ const Index = () => {
         )}
 
         {/* Question 10 - Open Text */}
-        {currentStep === 11 && (
-          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-gray-900/80 backdrop-blur-sm border border-gray-800">
+        {currentStep === 12 && (
+          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="pb-6">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-medium text-amber-400 bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20">
+                <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
                   Question 10 of 10
                 </span>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-muted-foreground">
                   100% Complete
                 </div>
               </div>
-              <CardTitle className="text-2xl font-light mb-4 text-white">
+              <CardTitle className="text-2xl font-light mb-4">
                 What's your biggest LinkedIn challenge right now when it comes to generating qualified leads for your business through your personal profile?
               </CardTitle>
             </CardHeader>
@@ -549,14 +584,14 @@ const Index = () => {
                   placeholder="Describe your main challenge with LinkedIn personal brand lead generation..."
                   value={openTextAnswer}
                   onChange={(e) => setOpenTextAnswer(e.target.value)}
-                  className="min-h-40 text-lg rounded-xl border-gray-700 bg-gray-800/50 backdrop-blur-sm focus:bg-gray-800 transition-all resize-none text-white"
+                  className="min-h-40 text-lg rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all resize-none"
                   required
                 />
                 <Button 
                   type="submit"
-                  className="w-full mt-6 h-16 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                  className="w-full mt-6 h-16 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
                 >
-                  Complete Audit & Get Profile Analysis
+                  Complete My Personal Brand Audit
                   <ChevronRight className="ml-3 h-6 w-6" />
                 </Button>
               </form>
@@ -564,132 +599,57 @@ const Index = () => {
           </Card>
         )}
 
-        {/* Analyzing Step */}
-        {currentStep === 12 && (
-          <Card className="max-w-4xl mx-auto border-0 shadow-2xl bg-gray-900/80 backdrop-blur-sm border border-gray-800">
-            <CardHeader className="text-center pb-6">
-              <div className="mx-auto mb-6 p-4 bg-gradient-to-br from-amber-500/20 to-amber-300/20 rounded-2xl w-20 h-20 flex items-center justify-center backdrop-blur-sm border border-amber-500/20 animate-pulse">
-                <Target className="h-10 w-10 text-amber-400" />
-              </div>
-              <CardTitle className="text-3xl font-light text-white mb-3">
-                Analyzing Your <span className="text-amber-400 font-medium">LinkedIn Profile</span>
-              </CardTitle>
-              <p className="text-gray-300 text-lg">
-                Our AI is examining your profile and answers to create personalized recommendations
-              </p>
-            </CardHeader>
-            <CardContent className="text-center">
-              <div className="flex justify-center mb-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400"></div>
-              </div>
-              <Button 
-                onClick={analyzeLinkedInProfile}
-                disabled={isAnalyzing}
-                className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black px-10 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-3"></div>
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    Start Profile Analysis
-                    <ChevronRight className="ml-3 h-5 w-5" />
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Profile Analysis Results */}
-        {currentStep === 13 && profileAnalysis && (
-          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-gray-900/80 backdrop-blur-sm border border-gray-800">
-            <CardHeader className="pb-6">
-              <CardTitle className="text-4xl font-light mb-3 text-white">
-                Your Personal LinkedIn <span className="text-amber-400 font-medium">Brand Analysis</span>
-              </CardTitle>
-              <p className="text-gray-300 text-lg">
-                Expert feedback on {profileAnalysis.name}'s LinkedIn personal brand
-              </p>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-gradient-to-br from-amber-500/10 via-amber-300/5 to-amber-500/5 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-gray-800">
-                <div className="prose prose-gray max-w-none">
-                  <div className="whitespace-pre-wrap text-white leading-relaxed text-lg">
-                    {profileAnalysis.analysis}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center">
-                <p className="text-gray-300 mb-8 text-lg">
-                  Ready to take your personal LinkedIn brand to the next level? Let's dive deeper with our comprehensive strategy.
-                </p>
-                <Button 
-                  onClick={() => setCurrentStep(14)}
-                  className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black px-10 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
-                >
-                  Get Your Complete Strategy
-                  <ChevronRight className="ml-3 h-5 w-5" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Final CTA */}
-        {currentStep === 14 && (
-          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-gray-900/80 backdrop-blur-sm border border-gray-800">
+        {currentStep === 13 && (
+          <Card className="max-w-5xl mx-auto border-0 shadow-2xl bg-card/80 backdrop-blur-sm border border-border/30">
             <CardHeader className="text-center pb-8">
-              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-green-500/20 to-amber-500/20 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm animate-pulse border border-green-500/20">
+              <div className="mx-auto mb-8 p-6 bg-gradient-to-br from-green-500/20 to-primary/20 rounded-3xl w-24 h-24 flex items-center justify-center backdrop-blur-sm animate-pulse border border-green-500/20">
                 <CheckCircle className="h-12 w-12 text-green-400" />
               </div>
-              <CardTitle className="text-4xl md:text-5xl font-light mb-6 leading-tight text-white">
+              <CardTitle className="text-4xl md:text-5xl font-light mb-6 leading-tight">
                 Your Personal LinkedIn Brand Can Generate 
-                <span className="block text-amber-400 font-medium">So Much More Revenue</span>
+                <span className="block text-primary font-medium">So Much More Revenue</span>
               </CardTitle>
-              <p className="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-4xl mx-auto">
                 Based on your audit responses, I can see exactly where you're leaving qualified prospects on the table. 
                 Your personal LinkedIn profile has massive untapped potential for generating high-value client conversations.
               </p>
             </CardHeader>
             <CardContent className="text-center">
-              <div className="bg-gradient-to-r from-amber-500/20 to-amber-300/20 rounded-3xl p-10 text-white mb-10 backdrop-blur-sm border border-amber-500/20">
+              <div className="bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl p-10 text-foreground mb-10 backdrop-blur-sm border border-primary/20">
                 <div className="flex items-center justify-center mb-6">
-                  <Sparkles className="h-8 w-8 mr-3 text-amber-400" />
+                  <Sparkles className="h-8 w-8 mr-3 text-primary" />
                   <h3 className="text-3xl font-medium">Complete Personal Brand Transformation</h3>
                 </div>
-                <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
                   Get a comprehensive personal brand audit, custom strategy roadmap, and 1:1 implementation plan 
                   designed specifically for your business and ideal clients.
                 </p>
                 <div className="grid md:grid-cols-3 gap-8">
                   <div className="text-center">
-                    <div className="bg-amber-500/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-amber-500/30">
-                      <User className="h-10 w-10 mx-auto text-amber-400" />
+                    <div className="bg-primary/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-primary/30">
+                      <User className="h-10 w-10 mx-auto text-primary" />
                     </div>
                     <h4 className="font-semibold text-xl mb-3">Profile Optimization</h4>
-                    <p className="text-gray-300 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       Complete headline, About section, and visual brand overhaul for maximum client attraction
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-amber-500/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-amber-500/30">
-                      <TrendingUp className="h-10 w-10 mx-auto text-amber-400" />
+                    <div className="bg-primary/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-primary/30">
+                      <TrendingUp className="h-10 w-10 mx-auto text-primary" />
                     </div>
                     <h4 className="font-semibold text-xl mb-3">Content Strategy</h4>
-                    <p className="text-gray-300 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       30-day content calendar with proven hooks, stories, and CTAs that convert prospects to calls
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-amber-500/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-amber-500/30">
-                      <Target className="h-10 w-10 mx-auto text-amber-400" />
+                    <div className="bg-primary/20 rounded-2xl p-6 mb-4 backdrop-blur-sm border border-primary/30">
+                      <Target className="h-10 w-10 mx-auto text-primary" />
                     </div>
                     <h4 className="font-semibold text-xl mb-3">Lead Gen System</h4>
-                    <p className="text-gray-300 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       Outreach templates, conversation frameworks, and follow-up sequences that book qualified discovery calls
                     </p>
                   </div>
@@ -697,14 +657,14 @@ const Index = () => {
               </div>
               
               <div className="mb-10">
-                <h3 className="text-3xl font-light mb-4 text-white">Book Your Free <span className="text-amber-400 font-medium">Strategy Call</span></h3>
-                <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+                <h3 className="text-3xl font-light mb-4">Book Your Free <span className="text-primary font-medium">Strategy Call</span></h3>
+                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                   Let's discuss your specific LinkedIn personal branding challenges and create a custom plan 
                   to start generating qualified leads within 30 days.
                 </p>
                 <Button 
                   size="lg"
-                  className="bg-gradient-to-r from-green-600 to-amber-500 hover:from-green-700 hover:to-amber-600 text-white px-16 py-8 text-xl font-medium rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                  className="bg-gradient-to-r from-green-600 to-primary hover:from-green-700 hover:to-primary/90 text-white px-16 py-8 text-xl font-medium rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
                   onClick={() => window.open('https://calendly.com/your-calendar-link', '_blank')}
                 >
                   <Calendar className="mr-4 h-7 w-7" />
@@ -712,7 +672,7 @@ const Index = () => {
                 </Button>
               </div>
               
-              <div className="grid md:grid-cols-3 gap-4 text-center text-sm text-gray-400">
+              <div className="grid md:grid-cols-3 gap-4 text-center text-sm text-muted-foreground">
                 <div className="flex items-center justify-center">
                   <CheckCircle className="h-4 w-4 mr-2 text-green-400" />
                   Free 15-minute consultation
