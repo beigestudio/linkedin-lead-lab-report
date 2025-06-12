@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -147,6 +146,12 @@ const Index = () => {
       return;
     }
 
+    // Normalize LinkedIn URL
+    let linkedinUrl = profileData.linkedinProfile.trim();
+    if (!linkedinUrl.startsWith('http://') && !linkedinUrl.startsWith('https://')) {
+      linkedinUrl = 'https://' + linkedinUrl;
+    }
+
     setIsAnalyzing(true);
     
     try {
@@ -154,7 +159,7 @@ const Index = () => {
         body: {
           name: profileData.name,
           email: profileData.email,
-          linkedinProfile: profileData.linkedinProfile,
+          linkedinProfile: linkedinUrl,
           whatDoYouDo: profileData.whatDoYouDo,
           targetAudience: profileData.targetAudience,
           mainLinkedInGoal: profileData.mainLinkedInGoal
@@ -389,13 +394,16 @@ const Index = () => {
                     LinkedIn Profile URL
                   </label>
                   <Input
-                    type="url"
-                    placeholder="Paste your LinkedIn URL"
+                    type="text"
+                    placeholder="linkedin.com/in/yourname or www.linkedin.com/in/yourname"
                     value={profileData.linkedinProfile}
                     onChange={(e) => setProfileData(prev => ({ ...prev, linkedinProfile: e.target.value }))}
                     className="h-14 text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all"
                     required
                   />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    You can paste with or without https:// - we'll handle it automatically
+                  </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
