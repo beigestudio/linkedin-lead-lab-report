@@ -3,86 +3,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
-
+/* Design system - Essential colors and theme only */
 @layer base {
   :root {
     --background: 0 0% 8%;
     --foreground: 45 15% 95%;
-
     --card: 0 0% 12%;
     --card-foreground: 45 15% 95%;
-
     --popover: 0 0% 12%;
     --popover-foreground: 45 15% 95%;
-
     --primary: 42 45% 75%;
     --primary-foreground: 0 0% 8%;
-
     --secondary: 0 0% 15%;
     --secondary-foreground: 45 15% 85%;
-
     --muted: 0 0% 18%;
     --muted-foreground: 45 8% 65%;
-
     --accent: 42 25% 70%;
     --accent-foreground: 0 0% 8%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 45 20% 98%;
-
     --border: 0 0% 20%;
     --input: 0 0% 15%;
     --ring: 42 45% 75%;
-
     --radius: 1rem;
-
-    --sidebar-background: 0 0% 5%;
-    --sidebar-foreground: 45 15% 90%;
-    --sidebar-primary: 42 45% 75%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 45 15% 85%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 42 45% 75%;
-  }
-
-  .dark {
-    --background: 0 0% 8%;
-    --foreground: 45 15% 95%;
-
-    --card: 0 0% 12%;
-    --card-foreground: 45 15% 95%;
-
-    --popover: 0 0% 12%;
-    --popover-foreground: 45 15% 95%;
-
-    --primary: 42 45% 75%;
-    --primary-foreground: 0 0% 8%;
-
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 45 15% 85%;
-
-    --muted: 0 0% 18%;
-    --muted-foreground: 45 8% 65%;
-
-    --accent: 42 25% 70%;
-    --accent-foreground: 0 0% 8%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 45 15% 95%;
-
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
-    --ring: 42 45% 75%;
-    --sidebar-background: 0 0% 5%;
-    --sidebar-foreground: 45 15% 90%;
-    --sidebar-primary: 42 45% 75%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 45 15% 85%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 42 45% 75%;
   }
 }
 
@@ -92,91 +35,56 @@
   }
 
   html {
-    /* Prevent zoom on iOS */
     -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* Enable smooth scrolling */
     scroll-behavior: smooth;
   }
 
   body {
     @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
-    /* Prevent horizontal scroll */
     overflow-x: hidden;
-    /* Improve touch scrolling on iOS */
     -webkit-overflow-scrolling: touch;
-    /* Prevent zoom on double tap */
     touch-action: manipulation;
-    /* Fixed positioning for mobile */
     position: relative;
     min-height: 100vh;
     min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
-  /* Prevent zoom on input focus for iOS */
+  /* Mobile input optimization - prevent zoom */
   input, textarea, select {
     font-size: 16px !important;
     -webkit-appearance: none;
     border-radius: 0;
   }
 
-  /* Prevent zoom on double tap for all elements */
+  /* Touch optimization */
   * {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
-
-  /* Improve text rendering */
-  body, input, textarea, button {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
 }
 
-/* Modern glass morphism effects */
-.glass {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Smooth animations with mobile performance optimization */
+/* Essential animations with performance optimization */
 .animate-float {
   animation: float 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
-/* Reduce animations on mobile for better performance */
-@media (max-width: 768px) {
-  .animate-float {
-    animation: float 8s ease-in-out infinite;
-  }
-  
-  /* Reduce motion for users who prefer it */
-  @media (prefers-reduced-motion: reduce) {
-    .animate-float {
-      animation: none;
-    }
-  }
-}
-
-/* Modern gradient backgrounds */
+/* Gradient background */
 .gradient-bg {
   background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
 }
 
-/* Custom scrollbar for modern theme */
+/* Modern scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -194,54 +102,13 @@
   background: hsl(var(--primary) / 0.8);
 }
 
-/* Mobile-specific improvements */
+/* Essential utilities */
 @layer utilities {
-  /* Touch-friendly button sizing */
   .touch-manipulation {
     touch-action: manipulation;
     user-select: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Improved focus states for accessibility */
-  .focus-visible\:ring-primary:focus-visible {
-    ring-color: hsl(var(--primary));
-  }
-
-  /* Mobile-optimized spacing */
-  .mobile-container {
-    @apply px-4 sm:px-6 lg:px-8;
-  }
-
-  /* Responsive text sizing */
-  .responsive-text-xs {
-    @apply text-xs sm:text-sm;
-  }
-  
-  .responsive-text-sm {
-    @apply text-sm sm:text-base;
-  }
-  
-  .responsive-text-base {
-    @apply text-base sm:text-lg;
-  }
-  
-  .responsive-text-lg {
-    @apply text-lg sm:text-xl;
-  }
-  
-  .responsive-text-xl {
-    @apply text-xl sm:text-2xl;
-  }
-  
-  .responsive-text-2xl {
-    @apply text-2xl sm:text-3xl lg:text-4xl;
-  }
-
-  /* Improved button states for mobile */
-  .mobile-button {
-    @apply min-h-[48px] touch-manipulation;
   }
 
   /* Safe area padding for devices with notches */
@@ -252,121 +119,20 @@
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
-  .safe-area-left {
-    padding-left: env(safe-area-inset-left);
-  }
-  
-  .safe-area-right {
-    padding-right: env(safe-area-inset-right);
-  }
 
-  /* Enhanced hover states for desktop only */
-  @media (hover: hover) and (pointer: fine) {
-    .desktop-hover\:scale-105:hover {
-      transform: scale(1.05);
-    }
-    
-    .desktop-hover\:shadow-xl:hover {
-      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
-    }
-  }
-
-  /* Mobile-first responsive containers */
-  .responsive-container {
-    @apply w-full max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl;
-  }
-
-  /* Optimized card layouts */
-  .mobile-card {
-    @apply rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8;
-  }
-
-  /* Enhanced form inputs for mobile */
-  .mobile-input {
-    @apply h-12 sm:h-14 text-base rounded-xl border-2 focus:border-primary transition-all duration-200;
-  }
-
-  /* Grid system for mobile-first design */
-  .mobile-grid {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8;
-  }
-
-  /* Typography scale for better readability */
-  .mobile-heading {
-    @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-light leading-tight;
-  }
-  
-  .mobile-subheading {
-    @apply text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed;
-  }
-  
-  .mobile-body {
-    @apply text-sm sm:text-base lg:text-lg leading-relaxed;
-  }
-
-  /* Enhanced loading states */
-  .skeleton {
-    @apply animate-pulse bg-muted rounded;
-  }
-
-  /* Improved animation performance */
-  .will-change-transform {
-    will-change: transform;
-  }
-  
-  .will-change-auto {
-    will-change: auto;
-  }
-
-  /* Mobile-optimized shadows */
-  .mobile-shadow {
-    @apply shadow-lg sm:shadow-xl lg:shadow-2xl;
-  }
-
-  /* Responsive padding and margins */
-  .responsive-p {
-    @apply p-4 sm:p-6 lg:p-8;
-  }
-  
-  .responsive-m {
-    @apply m-4 sm:m-6 lg:m-8;
-  }
-  
-  .responsive-py {
-    @apply py-4 sm:py-6 lg:py-8;
-  }
-  
-  .responsive-px {
-    @apply px-4 sm:px-6 lg:px-8;
-  }
-}
-
-/* Performance optimizations */
-@layer base {
   /* GPU acceleration for smooth animations */
   .gpu-accelerated {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
   }
-
-  /* Optimize rendering for mobile */
-  .optimized-rendering {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
 }
 
-/* Dark mode optimizations */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-  }
-}
-
-/* Reduced motion preferences */
+/* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+  
   *,
   *::before,
   *::after {
@@ -377,7 +143,25 @@
   }
 }
 
-/* High contrast mode support */
+/* Mobile-specific optimizations */
+@media screen and (max-width: 768px) {
+  .animate-float {
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  /* Prevent zoom on focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  textarea {
+    font-size: 16px !important;
+    transform: scale(1);
+    transition: none;
+  }
+}
+
+/* High contrast support */
 @media (prefers-contrast: high) {
   :root {
     --border: 0 0% 30%;
@@ -385,38 +169,9 @@
   }
 }
 
-/* Print styles */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  * {
-    background: white !important;
-    color: black !important;
-    box-shadow: none !important;
-  }
-}
-
-/* Mobile-specific zoom prevention */
-@media screen and (max-width: 768px) {
-  /* Prevent zoom on focus */
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="password"],
-  input[type="search"],
-  input[type="url"],
-  textarea,
-  select {
-    font-size: 16px !important;
-    transform: scale(1);
-    transition: none;
-  }
-  
-  /* Prevent zoom on orientation change */
-  html {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
+/* Dark mode optimization */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
   }
 }
