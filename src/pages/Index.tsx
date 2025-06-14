@@ -23,8 +23,7 @@ const Index = () => {
     targetAudience: "",
     mainLinkedInGoal: "",
     headline: "",
-    aboutSection: "",
-    recentPosts: ""
+    aboutSection: ""
   });
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [openTextAnswer, setOpenTextAnswer] = useState("");

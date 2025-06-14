@@ -76,21 +76,6 @@ export const ProfileContentForm = ({ profileData, onDataChange, onNext }: Profil
               The full summary/about section from your LinkedIn profile
             </p>
           </div>
-
-          <div>
-            <label className="block text-foreground mb-2 sm:mb-3 font-medium text-sm">
-              Recent Posts (Optional but Recommended)
-            </label>
-            <Textarea
-              placeholder="Copy 1-2 of your recent LinkedIn posts here for content analysis..."
-              value={profileData.recentPosts}
-              onChange={(e) => onDataChange({ ...profileData, recentPosts: e.target.value })}
-              className="min-h-24 sm:min-h-32 text-sm sm:text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all resize-none touch-manipulation"
-            />
-            <p className="text-xs text-muted-foreground mt-2">
-              This helps us analyze your content style and engagement approach
-            </p>
-          </div>
           
           <Button 
             type="submit"

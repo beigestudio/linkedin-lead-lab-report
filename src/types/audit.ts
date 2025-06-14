@@ -1,3 +1,4 @@
+
 export interface ProfileData {
   name: string;
   email: string;
@@ -6,7 +7,6 @@ export interface ProfileData {
   mainLinkedInGoal: string;
   headline: string;
   aboutSection: string;
-  recentPosts: string;
 }
 
 export interface Answer {

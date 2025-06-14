@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -12,13 +11,11 @@ const corsHeaders = {
 interface ProfileData {
   name: string;
   email: string;
-  linkedinProfile: string;
   whatDoYouDo: string;
   targetAudience: string;
   mainLinkedInGoal: string;
   headline: string;
   aboutSection: string;
-  recentPosts: string;
 }
 
 interface Answer {
@@ -103,7 +100,6 @@ Target Audience: ${profileData.targetAudience}
 LinkedIn Goal: ${profileData.mainLinkedInGoal}
 Current Headline: "${profileData.headline}"
 Current About Section: "${profileData.aboutSection}"
-Recent Posts: "${profileData.recentPosts || 'Not provided'}"
 
 ASSESSMENT RESPONSES:
 ${answers.map((answer, index) => `${index + 1}. ${answer.question}\nAnswer: ${answer.answer}`).join('\n\n')}
@@ -115,7 +111,7 @@ CALCULATED SCORE: ${overallScore}/100
 Create a comprehensive, hyper-personalized LinkedIn audit report with these specific sections:
 
 1. PROFILE ANALYSIS (200-250 words):
-Analyze their actual headline, about section, and posts. Be specific about what's working and what needs immediate improvement. Reference their exact content.
+Analyze their actual headline and about section. Be specific about what's working and what needs immediate improvement. Reference their exact content.
 
 2. QUESTION INSIGHTS (150-200 words):
 Analyze patterns in their responses. Identify their biggest strengths and blind spots based on their answers.
