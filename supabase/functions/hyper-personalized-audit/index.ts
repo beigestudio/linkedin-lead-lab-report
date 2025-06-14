@@ -50,7 +50,7 @@ const extractSection = (text: string, startMarker: string, endMarker?: string): 
 };
 
 // Improved parsing function with multiple strategies
-const parseAnalysisResponse = (fullAnalysis: string) => {
+const parseAnalysisResponse = (fullAnalysis: string, profileData: ProfileData) => {
   console.log('Full OpenAI response length:', fullAnalysis.length);
   console.log('First 500 characters:', fullAnalysis.substring(0, 500));
   
@@ -215,13 +215,41 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Starting hyper-personalized audit analysis...');
+    
+    // Check if OpenAI API key is configured
+    if (!openAIApiKey) {
+      console.error('OpenAI API key is not configured');
+      return new Response(JSON.stringify({ 
+        error: 'OpenAI API key is not configured. Please set the OPENAI_API_KEY secret in Supabase.' 
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const { profileData, answers, openTextAnswer }: AnalysisRequest = await req.json();
+
+    if (!profileData || !profileData.name) {
+      console.error('Invalid request data: missing profile information');
+      return new Response(JSON.stringify({ 
+        error: 'Invalid request data. Profile information is required.' 
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     console.log('Generating hyper-personalized audit for:', profileData.name);
 
     // Calculate overall score based on answers
     const calculateScore = () => {
       let score = 50; // Base score
+      
+      if (!answers || answers.length === 0) {
+        console.log('No answers provided, using base score');
+        return score;
+      }
       
       answers.forEach(answer => {
         switch (answer.answer) {
@@ -268,6 +296,7 @@ serve(async (req) => {
     };
 
     const overallScore = calculateScore();
+    console.log('Calculated overall score:', overallScore);
 
     // Create detailed analysis prompt with better structure
     const analysisPrompt = `You are an expert LinkedIn brand strategist who has audited 500+ executive profiles. 
@@ -281,9 +310,9 @@ Current Headline: "${profileData.headline}"
 Current About Section: "${profileData.aboutSection}"
 
 ASSESSMENT RESPONSES:
-${answers.map((answer, index) => `${index + 1}. ${answer.question}\nAnswer: ${answer.answer}`).join('\n\n')}
+${answers && answers.length > 0 ? answers.map((answer, index) => `${index + 1}. ${answer.question}\nAnswer: ${answer.answer}`).join('\n\n') : 'No assessment responses provided'}
 
-MAIN CHALLENGE: ${openTextAnswer}
+MAIN CHALLENGE: ${openTextAnswer || 'Not specified'}
 
 CALCULATED SCORE: ${overallScore}/100
 
@@ -309,6 +338,12 @@ Create a prioritized 30-day implementation plan with specific weekly goals and m
 
 Be direct, specific, and actionable. Use their name throughout. Reference their specific content when analyzing. Focus on lead generation and client acquisition for their target audience.`;
 
+    console.log('Making OpenAI API request...');
+    
+    // Create timeout controller
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -330,19 +365,49 @@ Be direct, specific, and actionable. Use their name throughout. Reference their 
         max_tokens: 1800,
         temperature: 0.7,
       }),
+      signal: controller.signal,
     });
 
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`OpenAI API error: ${response.status} - ${errorText}`);
+      
+      let errorMessage = 'Failed to generate analysis. ';
+      if (response.status === 401) {
+        errorMessage += 'Invalid API key. Please check your OpenAI API key configuration.';
+      } else if (response.status === 429) {
+        errorMessage += 'Rate limit exceeded. Please try again in a few minutes.';
+      } else if (response.status === 402) {
+        errorMessage += 'Insufficient credits. Please add credits to your OpenAI account.';
+      } else {
+        errorMessage += `OpenAI API error (${response.status}). Please try again.`;
+      }
+      
+      return new Response(JSON.stringify({ error: errorMessage }), {
+        status: response.status,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const data = await response.json();
-    const fullAnalysis = data.choices[0].message.content;
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Invalid OpenAI response structure:', data);
+      return new Response(JSON.stringify({ 
+        error: 'Invalid response from OpenAI. Please try again.' 
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
+    const fullAnalysis = data.choices[0].message.content;
     console.log('OpenAI API call successful, response received');
     
     // Parse the analysis using improved parsing
-    const parsedAnalysis = parseAnalysisResponse(fullAnalysis);
+    const parsedAnalysis = parseAnalysisResponse(fullAnalysis, profileData);
 
     console.log('Hyper-personalized analysis completed successfully');
 
@@ -362,9 +427,17 @@ Be direct, specific, and actionable. Use their name throughout. Reference their 
 
   } catch (error) {
     console.error('Error in hyper-personalized-audit function:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Failed to generate personalized audit. Please try again.' 
-    }), {
+    
+    let errorMessage = 'Failed to generate personalized audit. ';
+    if (error.name === 'AbortError') {
+      errorMessage += 'Request timed out. Please try again.';
+    } else if (error.message?.includes('fetch')) {
+      errorMessage += 'Network error. Please check your connection and try again.';
+    } else {
+      errorMessage += 'Please try again. If the problem persists, contact support.';
+    }
+    
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

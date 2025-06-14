@@ -30,12 +30,15 @@ const Index = () => {
   const [hyperPersonalizedAnalysis, setHyperPersonalizedAnalysis] = useState<HyperPersonalizedAnalysis | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
   const { toast } = useToast();
 
   const generateHyperPersonalizedAnalysis = async () => {
     setIsAnalyzing(true);
     
     try {
+      console.log('Starting analysis with profile data:', profileData.name);
+      
       const { data, error } = await supabase.functions.invoke('hyper-personalized-audit', {
         body: {
           profileData,
@@ -45,22 +48,80 @@ const Index = () => {
       });
 
       if (error) {
-        throw error;
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Failed to invoke analysis function');
       }
 
+      if (!data) {
+        throw new Error('No data received from analysis function');
+      }
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      console.log('Analysis completed successfully');
       setHyperPersonalizedAnalysis(data);
       setCurrentStep(14);
+      setRetryCount(0); // Reset retry count on success
       
     } catch (error) {
       console.error('Hyper-personalized analysis error:', error);
+      
+      let errorMessage = "Analysis failed. ";
+      let variant: "destructive" | "default" = "destructive";
+      
+      if (error instanceof Error) {
+        const errorText = error.message.toLowerCase();
+        
+        if (errorText.includes('api key')) {
+          errorMessage += "OpenAI API key issue. Please check your configuration.";
+        } else if (errorText.includes('rate limit') || errorText.includes('429')) {
+          errorMessage += "Rate limit exceeded. Please try again in a few minutes.";
+        } else if (errorText.includes('credits') || errorText.includes('402')) {
+          errorMessage += "Insufficient OpenAI credits. Please add credits to your account.";
+        } else if (errorText.includes('timeout') || errorText.includes('timed out')) {
+          errorMessage += "Request timed out. Please try again.";
+        } else if (errorText.includes('network') || errorText.includes('fetch')) {
+          errorMessage += "Network error. Please check your connection.";
+        } else {
+          errorMessage += error.message;
+        }
+      } else {
+        errorMessage += "Unknown error occurred.";
+      }
+
+      // Add retry suggestion if this isn't a configuration issue
+      if (!errorMessage.includes('API key') && !errorMessage.includes('credits')) {
+        errorMessage += ` (Attempt ${retryCount + 1}/3)`;
+        
+        if (retryCount < 2) {
+          errorMessage += " - Click 'Try Again' to retry.";
+          variant = "default";
+        }
+      }
+
       toast({
-        title: "Analysis failed",
-        description: "Please try again. If the problem persists, contact support.",
-        variant: "destructive",
+        title: "Analysis Failed",
+        description: errorMessage,
+        variant,
+        action: retryCount < 2 && !errorMessage.includes('API key') && !errorMessage.includes('credits') ? (
+          <button 
+            onClick={handleRetry}
+            className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:bg-primary/90"
+          >
+            Try Again
+          </button>
+        ) : undefined,
       });
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1);
+    generateHyperPersonalizedAnalysis();
   };
 
   const handleAnswer = (questionIndex: number, answer: string) => {
@@ -103,6 +164,7 @@ const Index = () => {
 
   const handleFinalSubmit = () => {
     setCurrentStep(13);
+    setRetryCount(0); // Reset retry count when starting fresh
     generateHyperPersonalizedAnalysis();
   };
 
