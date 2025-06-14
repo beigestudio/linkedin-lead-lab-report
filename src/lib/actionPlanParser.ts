@@ -10,7 +10,7 @@ export const parseActionPlan = (actionPlan: string) => {
     // If no week patterns found, try to split by numbered lists or bullet points
     const lines = actionPlan.split('\n').filter(line => line.trim());
     return lines.map((line, index) => ({
-      week: `Step ${index + 1}`,
+      week: `week ${index + 1} -`,
       content: line.trim()
     }));
   }
@@ -18,8 +18,14 @@ export const parseActionPlan = (actionPlan: string) => {
   // Split content by week markers
   const sections = actionPlan.split(weekPattern).filter(section => section.trim());
   
-  return weekMarkers.map((marker, index) => ({
-    week: marker.replace(/[\n:]/g, '').trim(),
-    content: sections[index]?.trim() || ''
-  }));
+  return weekMarkers.map((marker, index) => {
+    // Extract week number from the marker
+    const weekNumberMatch = marker.match(/\d+/);
+    const weekNumber = weekNumberMatch ? weekNumberMatch[0] : index + 1;
+    
+    return {
+      week: `week ${weekNumber} -`,
+      content: sections[index]?.trim() || ''
+    };
+  });
 };

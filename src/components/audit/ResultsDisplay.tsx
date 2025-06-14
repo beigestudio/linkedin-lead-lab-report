@@ -155,7 +155,7 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
                     {week.week}
                   </h4>
                   <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-                    {week.content.split('\n').map((line, lineIndex) => (
+                    {week.content.split('\n').filter(line => line.trim()).map((line, lineIndex) => (
                       <p key={lineIndex} className="mb-2">
                         {line.trim()}
                       </p>
