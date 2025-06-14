@@ -7,11 +7,11 @@ export const questions: Question[] = [
     question: "How often do you post on your personal LinkedIn profile?",
     options: ["Daily", "Weekly", "Monthly", "Rarely", "Never"],
     feedback: {
-      "Daily": "Impressive discipline! Daily posting builds top-of-mind presence fast. As a LinkedIn strategist, I see this separating the 1% who actually generate consistent leads. Key question: Does every post have a strategic lead-gen hook tailored to your ideal client's pain points?",
-      "Weekly": "Good consistency foundation. But weekly without strategic hooks loses momentum in LinkedIn's algorithm. Most founders I audit post weekly but wonder why they're not getting client inquiries. The issue? Generic content without conversion-focused CTAs.",
-      "Monthly": "This frequency won't build your personal brand or generate leads. LinkedIn rewards consistent creators. Most C-suite executives I work with started here and stayed invisible until we implemented a strategic posting schedule.",
-      "Rarely": "Your competitors are posting while you're not - they're capturing your potential clients. This is exactly why 87% of founders struggle with LinkedIn lead generation. Visibility equals viability in today's market.",
-      "Never": "You're essentially invisible to your ideal clients. LinkedIn is where your prospects are making buying decisions daily. Every day you don't post is revenue walking out the door to competitors who show up consistently."
+      "Daily": "Excellent consistency! Daily posting builds strong thought leadership and keeps you visible to your network. The key is ensuring each post provides strategic value to your target audience while positioning you as an industry expert.",
+      "Weekly": "Good foundation for building your professional brand. Weekly posting can be effective when each post is high-quality and strategically crafted. Consider increasing frequency gradually while maintaining content quality.",
+      "Monthly": "This frequency limits your ability to build meaningful engagement with your target audience. Most successful executives find that more consistent posting helps maintain visibility and thought leadership in their industry.",
+      "Rarely": "Inconsistent posting makes it challenging to build your personal brand and stay connected with your professional network. Regular, valuable content sharing is essential for LinkedIn success.",
+      "Never": "You're missing significant opportunities to establish thought leadership and connect with potential clients or partners. Even modest, consistent posting can dramatically improve your professional visibility."
     }
   },
   {
@@ -19,9 +19,9 @@ export const questions: Question[] = [
     question: "Does your personal LinkedIn headline clearly communicate who you help and the specific outcome you deliver?",
     options: ["Yes, crystal clear", "Somewhat clear", "No, it's vague"],
     feedback: {
-      "Yes, crystal clear": "Excellent! Your headline is your #1 conversion asset on LinkedIn. I hope it's outcome-driven, not just a job title. Pro tip from my audits: The best headlines I've crafted for C-suite clients focus on the transformation they provide, not their credentials.",
-      "Somewhat clear": "You're losing high-value clients here. From auditing 500+ executive profiles, vague headlines are the #1 reason qualified prospects scroll past. Your headline needs to promise a clear, measurable benefit that makes your ideal client think 'That's exactly what I need.'",
-      "No, it's vague": "This is a massive visibility blocker costing you clients daily. Generic headlines like 'CEO at Company X' tell prospects nothing about why they should care. I've seen headline optimizations alone increase profile views by 340% and double inbound inquiries."
+      "Yes, crystal clear": "Excellent! A clear, outcome-focused headline is crucial for attracting the right audience. Ensure it speaks directly to your target market's needs and the transformation you provide.",
+      "Somewhat clear": "There's room for optimization here. Your headline should immediately communicate the value you provide to your specific target audience. Consider refining it to be more outcome-focused and compelling.",
+      "No, it's vague": "This is a critical area for improvement. Your headline is prime real estate for attracting your ideal connections. A clear, benefit-driven headline can significantly increase profile engagement and connection requests."
     }
   },
   {
@@ -29,9 +29,9 @@ export const questions: Question[] = [
     question: "How compelling is your About section? Does it tell a results-focused story that hooks your ideal client?",
     options: ["Highly compelling, results-focused", "Somewhat engaging, could be stronger", "More like a resume/bio, not client-focused"],
     feedback: {
-      "Highly compelling, results-focused": "Perfect positioning! Make sure it ends with a direct call-to-action for calls or messages. The best About sections I've written for executives follow the problem-agitation-solution formula and end with clear next steps for prospects.",
-      "Somewhat engaging, could be stronger": "You're missing emotional connection or clear positioning. Your About section should make prospects think 'This person understands my exact challenge.' Most executives I audit have About sections that talk about them, not their client's transformation.",
-      "More like a resume/bio, not client-focused": "Nobody hires based on LinkedIn resumes. Your story must speak directly to client problems and position you as the definitive solution. I've seen About section rewrites increase discovery call bookings by 250% for executive clients."
+      "Highly compelling, results-focused": "Outstanding! A well-crafted About section that focuses on client outcomes rather than personal achievements is key to attracting quality connections and opportunities.",
+      "Somewhat engaging, could be stronger": "Your About section has potential but could benefit from more strategic positioning. Focus on addressing your target audience's challenges and clearly articulating how you solve them.",
+      "More like a resume/bio, not client-focused": "This is a common miss that significantly impacts your LinkedIn effectiveness. Transform your About section to speak directly to your ideal client's needs rather than listing your background."
     }
   },
   {
@@ -39,9 +39,9 @@ export const questions: Question[] = [
     question: "How strong are your post hooks? Do they consistently stop your ideal clients from scrolling?",
     options: ["Always hook within 1-2 lines", "Sometimes hooks work", "Hooks rarely catch attention"],
     feedback: {
-      "Always hook within 1-2 lines": "Excellent! Hooks are critical for LinkedIn's algorithm and engagement. The question is: Are your hooks specifically tailored to your ideal client's urgent pain points? Generic hooks get generic audiences - not qualified prospects.",
-      "Sometimes hooks work": "Inconsistency kills momentum on LinkedIn. Every post needs a hook that speaks directly to your prospect's current challenge. Random hooks attract random people, not high-value clients ready to invest in solutions.",
-      "Hooks rarely catch attention": "Without compelling hooks, your posts are invisible in the feed. This is exactly why your engagement is low and you're not generating qualified leads. Strong hooks are the difference between 50 views and 5,000 views."
+      "Always hook within 1-2 lines": "Excellent! Strong hooks are essential for cutting through LinkedIn's noise. The best hooks address specific pain points or offer intriguing insights that your target audience can't ignore.",
+      "Sometimes hooks work": "Consistency in crafting compelling hooks will improve your content performance. Focus on opening lines that immediately speak to your target audience's current challenges or interests.",
+      "Hooks rarely catch attention": "This significantly impacts your content's reach and engagement. Strong hooks are the difference between content that gets ignored and content that drives meaningful business conversations."
     }
   },
   {
@@ -49,9 +49,9 @@ export const questions: Question[] = [
     question: "Do your posts consistently include strategic calls-to-action that drive qualified prospects to take action?",
     options: ["Yes, every post has a strategic CTA", "Sometimes, not always", "Rarely or never"],
     feedback: {
-      "Yes, every post has a strategic CTA": "Perfect! CTAs turn engagement into business conversations. The best executive accounts I manage have CTAs that feel natural and valuable, not salesy. Are yours driving the right type of prospects to reach out?",
-      "Sometimes, not always": "You're missing conversion opportunities. Every piece of content should guide prospects toward a next step, whether that's a comment, DM, or call booking. Inconsistent CTAs mean inconsistent lead flow.",
-      "Rarely or never": "Without CTAs, you're creating expensive content with zero ROI. You're educating your competitors' future clients. Every post should have a clear next step that moves prospects closer to working with you."
+      "Yes, every post has a strategic CTA": "Perfect strategy! Well-crafted CTAs guide your audience toward meaningful next steps, whether that's engagement, connection, or business conversations.",
+      "Sometimes, not always": "Consistency with strategic CTAs will improve your conversion from content to business conversations. Every piece of content should have a clear purpose and next step for your audience.",
+      "Rarely or never": "You're missing opportunities to convert engagement into business relationships. Strategic CTAs help guide prospects through your relationship-building process."
     }
   },
   {
@@ -59,9 +59,9 @@ export const questions: Question[] = [
     question: "How targeted is your LinkedIn network? Are your connections qualified prospects who could become clients?",
     options: ["Highly targeted, handpicked prospects", "Somewhat targeted", "Not targeted at all"],
     feedback: {
-      "Highly targeted, handpicked prospects": "Smart strategy! A focused network of qualified prospects is infinitely more valuable than random connections. Quality over quantity always wins for executive personal branding and lead generation.",
-      "Somewhat targeted": "You could dramatically improve your connection strategy. Every connection should be a potential client, referral partner, or industry influencer. Random connections dilute your authority and waste your time.",
-      "Not targeted at all": "Random networks hurt your authority and create noise in your feed. Strategic connection building with ideal prospects is how executives build valuable business relationships that convert to revenue."
+      "Highly targeted, handpicked prospects": "Excellent networking strategy! A curated network of qualified prospects and industry leaders provides much higher value than a large, unfocused network.",
+      "Somewhat targeted": "There's opportunity to be more strategic with your connection building. Focus on connecting with ideal prospects, referral partners, and industry influencers who align with your business goals.",
+      "Not targeted at all": "Strategic network building is crucial for LinkedIn success. A focused approach to connections will improve the quality of your feed content and business opportunities."
     }
   },
   {
@@ -69,10 +69,10 @@ export const questions: Question[] = [
     question: "How consistently do you engage meaningfully with your ideal prospects' content to build relationships?",
     options: ["Daily strategic engagement", "Weekly engagement", "Rarely engage", "Never engage"],
     feedback: {
-      "Daily strategic engagement": "Excellent relationship-building habit! Strategic engagement builds trust and positions you as a peer, not a vendor. This is how the most successful executives I work with build their pipeline organically.",
-      "Weekly engagement": "Decent foundation, but not enough frequency to build meaningful relationships with high-value prospects. LinkedIn relationships require consistent nurturing to convert into business conversations.",
-      "Rarely engage": "Without genuine engagement, you're just broadcasting to strangers. The money is in the relationships, and relationships require consistent, valuable interactions with your ideal prospects.",
-      "Never engage": "You're missing the core of LinkedIn's power - relationship building. Social selling isn't posting and hoping - it's strategic relationship nurturing that leads to trusted advisor status and inbound opportunities."
+      "Daily strategic engagement": "Outstanding relationship-building approach! Consistent, valuable engagement builds trust and positions you as a peer rather than just another connection.",
+      "Weekly engagement": "Good foundation, though more frequent engagement can accelerate relationship building. Strategic daily engagement often leads to stronger professional relationships.",
+      "Rarely engage": "Regular engagement is essential for building meaningful professional relationships. Consider implementing a more systematic approach to engaging with your network's content.",
+      "Never engage": "You're missing the core relationship-building aspect of LinkedIn. Authentic engagement is how trust and business relationships are built on the platform."
     }
   },
   {
@@ -80,9 +80,9 @@ export const questions: Question[] = [
     question: "Are you consistently converting LinkedIn conversations into qualified discovery calls with ideal prospects?",
     options: ["Yes, regularly booking qualified calls", "Occasionally, but inconsistent", "No, conversations don't convert"],
     feedback: {
-      "Yes, regularly booking qualified calls": "You're executing well! The key is scaling this process. Are you tracking which conversation starters and follow-up sequences have the highest conversion rates to qualified calls?",
-      "Occasionally, but inconsistent": "Your outreach or follow-up process needs systematization. Small improvements in your conversation flow and call-booking process can easily double your discovery call rate with qualified prospects.",
-      "No, conversations don't convert": "LinkedIn leads are there, but you need a proven system to convert conversations into calls. Most executives struggle here because they're too salesy too fast, or not strategic enough in their follow-up."
+      "Yes, regularly booking qualified calls": "Excellent execution! Converting LinkedIn engagement into business conversations is the ultimate goal. Focus on scaling and systematizing your successful approach.",
+      "Occasionally, but inconsistent": "There's opportunity to improve your conversion process. Consider refining your conversation approach and follow-up strategy to increase consistency.",
+      "No, conversations don't convert": "This suggests your conversation strategy may need refinement. Focus on building genuine relationships before introducing business discussions."
     }
   },
   {
@@ -90,9 +90,9 @@ export const questions: Question[] = [
     question: "Do you systematically track LinkedIn metrics (reach, engagement, leads, calls booked) to optimize your personal brand strategy?",
     options: ["Yes, comprehensive tracking", "Sometimes track basic metrics", "No systematic tracking"],
     feedback: {
-      "Yes, comprehensive tracking": "Data-driven approach! This separates elite personal brands from everyone else. The executives who track and optimize consistently see 3x better results than those who post and hope.",
-      "Sometimes track basic metrics": "Partial tracking limits your optimization potential. Systematic metric tracking helps you double down on what works and eliminate what doesn't - crucial for executive time efficiency.",
-      "No systematic tracking": "Without data, you're flying blind and wasting time on ineffective strategies. Tracking your LinkedIn ROI is essential for building a personal brand that actually generates qualified business opportunities."
+      "Yes, comprehensive tracking": "Excellent data-driven approach! Systematic tracking enables continuous optimization and ensures your LinkedIn efforts deliver measurable business results.",
+      "Sometimes track basic metrics": "Partial tracking is a good start. Comprehensive metrics tracking will help you optimize your strategy and improve your return on time invested.",
+      "No systematic tracking": "Without tracking, it's difficult to optimize your approach or measure ROI. Consider implementing basic metrics tracking to improve your LinkedIn effectiveness."
     }
   }
 ];

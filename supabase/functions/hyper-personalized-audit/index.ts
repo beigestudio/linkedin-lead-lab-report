@@ -31,183 +31,14 @@ interface AnalysisRequest {
   openTextAnswer: string;
 }
 
-// Helper function to extract content between markers
-const extractSection = (text: string, startMarker: string, endMarker?: string): string => {
-  const startIndex = text.toLowerCase().indexOf(startMarker.toLowerCase());
-  if (startIndex === -1) return '';
-  
-  const contentStart = startIndex + startMarker.length;
-  let contentEnd = text.length;
-  
-  if (endMarker) {
-    const endIndex = text.toLowerCase().indexOf(endMarker.toLowerCase(), contentStart);
-    if (endIndex !== -1) {
-      contentEnd = endIndex;
-    }
-  }
-  
-  return text.substring(contentStart, contentEnd).trim();
-};
-
-// Improved parsing function with multiple strategies
-const parseAnalysisResponse = (fullAnalysis: string, profileData: ProfileData) => {
-  console.log('Full OpenAI response length:', fullAnalysis.length);
-  console.log('First 500 characters:', fullAnalysis.substring(0, 500));
-  
-  let profileAnalysis = '';
-  let questionInsights = '';
-  let personalizedRecommendations = '';
-  let actionPlan = '';
-  let strengths: string[] = [];
-  let improvements: string[] = [];
-
-  // Strategy 1: Look for numbered sections
-  const numberedSections = fullAnalysis.split(/\d+\.\s+/);
-  if (numberedSections.length >= 5) {
-    console.log('Using numbered sections parsing strategy');
-    profileAnalysis = numberedSections[1]?.replace(/^[A-Z\s:]+/i, '').trim() || '';
-    questionInsights = numberedSections[2]?.replace(/^[A-Z\s:]+/i, '').trim() || '';
-    personalizedRecommendations = numberedSections[3]?.replace(/^[A-Z\s:]+/i, '').trim() || '';
-    actionPlan = numberedSections[4]?.replace(/^[A-Z\s:]+/i, '').trim() || '';
-  }
-
-  // Strategy 2: Look for specific section headers
-  if (!profileAnalysis || profileAnalysis.length < 50) {
-    console.log('Using header-based parsing strategy');
-    
-    const profileMarkers = ['PROFILE ANALYSIS', 'Profile Analysis', '1. PROFILE ANALYSIS'];
-    const insightsMarkers = ['QUESTION INSIGHTS', 'Question Insights', '2. QUESTION INSIGHTS'];
-    const recommendationsMarkers = ['PERSONALIZED RECOMMENDATIONS', 'Personalized Recommendations', '3. PERSONALIZED RECOMMENDATIONS'];
-    const actionMarkers = ['ACTION PLAN', 'Action Plan', '4. ACTION PLAN'];
-    
-    for (const marker of profileMarkers) {
-      const extracted = extractSection(fullAnalysis, marker, insightsMarkers[0]);
-      if (extracted && extracted.length > 50) {
-        profileAnalysis = extracted.replace(/^[:\-\s]+/, '').trim();
-        break;
-      }
-    }
-    
-    for (const marker of insightsMarkers) {
-      const extracted = extractSection(fullAnalysis, marker, recommendationsMarkers[0]);
-      if (extracted && extracted.length > 50) {
-        questionInsights = extracted.replace(/^[:\-\s]+/, '').trim();
-        break;
-      }
-    }
-    
-    for (const marker of recommendationsMarkers) {
-      const extracted = extractSection(fullAnalysis, marker, actionMarkers[0]);
-      if (extracted && extracted.length > 50) {
-        personalizedRecommendations = extracted.replace(/^[:\-\s]+/, '').trim();
-        break;
-      }
-    }
-    
-    for (const marker of actionMarkers) {
-      const extracted = extractSection(fullAnalysis, marker);
-      if (extracted && extracted.length > 50) {
-        actionPlan = extracted.replace(/^[:\-\s]+/, '').trim();
-        break;
-      }
-    }
-  }
-
-  // Strategy 3: Fallback to chunking if sections are still empty
-  if (!profileAnalysis || profileAnalysis.length < 50) {
-    console.log('Using chunking fallback strategy');
-    const chunks = fullAnalysis.split('\n\n').filter(chunk => chunk.trim().length > 100);
-    
-    if (chunks.length >= 4) {
-      profileAnalysis = chunks[0] || '';
-      questionInsights = chunks[1] || '';
-      personalizedRecommendations = chunks[2] || '';
-      actionPlan = chunks[3] || '';
-    } else if (chunks.length >= 2) {
-      // If we have at least 2 chunks, split them more creatively
-      const allText = chunks.join(' ');
-      const midPoint = Math.floor(allText.length / 2);
-      profileAnalysis = allText.substring(0, midPoint);
-      personalizedRecommendations = allText.substring(midPoint);
-      questionInsights = 'Based on your responses, several key patterns emerge that indicate both your current approach and areas for strategic improvement.';
-      actionPlan = 'Focus on implementing the recommendations above systematically, starting with the highest-impact changes to your profile content and posting strategy.';
-    }
-  }
-
-  // Extract strengths and improvements
-  const strengthsMatch = fullAnalysis.match(/(?:STRENGTHS|Your Strengths)[:\s]*\n?((?:[-•*]\s*.+(?:\n|$))+)/i);
-  const improvementsMatch = fullAnalysis.match(/(?:PRIORITY IMPROVEMENTS|Improvements|Areas for Improvement)[:\s]*\n?((?:[-•*]\s*.+(?:\n|$))+)/i);
-  
-  if (strengthsMatch) {
-    strengths = strengthsMatch[1]
-      .split(/[-•*]\s*/)
-      .filter(s => s.trim())
-      .map(s => s.trim().replace(/\n/g, ' '))
-      .slice(0, 4);
-  }
-  
-  if (improvementsMatch) {
-    improvements = improvementsMatch[1]
-      .split(/[-•*]\s*/)
-      .filter(s => s.trim())
-      .map(s => s.trim().replace(/\n/g, ' '))
-      .slice(0, 4);
-  }
-
-  // Provide meaningful defaults if extraction failed
-  if (strengths.length === 0) {
-    strengths = [
-      'Clear understanding of your target market and business goals',
-      'Professional background that provides credibility in your field',
-      'Awareness of the importance of LinkedIn for business growth',
-      'Willingness to invest in improving your LinkedIn presence'
-    ];
-  }
-
-  if (improvements.length === 0) {
-    improvements = [
-      'Optimize headline to be more client-focused and results-oriented',
-      'Restructure about section to speak directly to your target audience',
-      'Develop a consistent content strategy that showcases expertise',
-      'Implement systematic engagement practices to build relationships'
-    ];
-  }
-
-  // Ensure all sections have meaningful content
-  if (!profileAnalysis || profileAnalysis.length < 50) {
-    profileAnalysis = `Based on your current LinkedIn profile, there are significant opportunities to optimize your headline and about section to better attract ${profileData.targetAudience}. Your headline should clearly communicate the value you provide, while your about section needs to be restructured to speak directly to your ideal clients' pain points and desired outcomes.`;
-  }
-
-  if (!questionInsights || questionInsights.length < 50) {
-    questionInsights = `Your assessment responses reveal both strengths and opportunities in your LinkedIn strategy. The key areas that need immediate attention include content consistency, engagement practices, and conversion optimization to align with your goal of ${profileData.mainLinkedInGoal}.`;
-  }
-
-  if (!personalizedRecommendations || personalizedRecommendations.length < 50) {
-    personalizedRecommendations = `For your role as ${profileData.whatDoYouDo} targeting ${profileData.targetAudience}, focus on creating content that demonstrates your expertise while addressing their specific challenges. Develop a content calendar that balances educational posts, client success stories, and thought leadership pieces. Your headline should clearly state the transformation you provide, and your about section should follow a problem-solution-proof structure.`;
-  }
-
-  if (!actionPlan || actionPlan.length < 50) {
-    actionPlan = `Week 1: Rewrite your headline and about section using the recommendations above. Week 2: Create a content calendar with 4-5 post ideas per week. Week 3: Begin systematic engagement with your target audience. Week 4: Launch your new content strategy and track engagement metrics.`;
-  }
-
-  console.log('Parsed sections lengths:', {
-    profileAnalysis: profileAnalysis.length,
-    questionInsights: questionInsights.length,
-    personalizedRecommendations: personalizedRecommendations.length,
-    actionPlan: actionPlan.length,
-    strengths: strengths.length,
-    improvements: improvements.length
-  });
-
-  return {
-    profileAnalysis,
-    questionInsights,
-    personalizedRecommendations,
-    actionPlan,
-    strengths,
-    improvements
-  };
-};
+interface AnalysisResponse {
+  profileAnalysis: string;
+  questionInsights: string;
+  personalizedRecommendations: string;
+  actionPlan: string;
+  strengths: string[];
+  improvements: string[];
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -215,13 +46,12 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Starting hyper-personalized audit analysis...');
+    console.log('Starting LinkedIn audit analysis...');
     
-    // Check if OpenAI API key is configured
     if (!openAIApiKey) {
       console.error('OpenAI API key is not configured');
       return new Response(JSON.stringify({ 
-        error: 'OpenAI API key is not configured. Please set the OPENAI_API_KEY secret in Supabase.' 
+        error: 'OpenAI API key is not configured. Please check your configuration.' 
       }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -240,14 +70,13 @@ serve(async (req) => {
       });
     }
 
-    console.log('Generating hyper-personalized audit for:', profileData.name);
+    console.log('Generating professional audit for:', profileData.name);
 
-    // Calculate overall score based on answers
+    // Calculate overall score
     const calculateScore = () => {
-      let score = 50; // Base score
+      let score = 50;
       
       if (!answers || answers.length === 0) {
-        console.log('No answers provided, using base score');
         return score;
       }
       
@@ -275,18 +104,7 @@ serve(async (req) => {
           case 'Sometimes track basic metrics':
             score += 4;
             break;
-          case 'Monthly':
-          case 'Rarely':
-          case 'Never':
-          case 'No, it\'s vague':
-          case 'More like a resume/bio, not client-focused':
-          case 'Hooks rarely catch attention':
-          case 'Rarely or never':
-          case 'Not targeted at all':
-          case 'Rarely engage':
-          case 'Never engage':
-          case 'No, conversations don\'t convert':
-          case 'No systematic tracking':
+          default:
             score += 1;
             break;
         }
@@ -298,10 +116,10 @@ serve(async (req) => {
     const overallScore = calculateScore();
     console.log('Calculated overall score:', overallScore);
 
-    // Create detailed analysis prompt with better structure
-    const analysisPrompt = `You are an expert LinkedIn brand strategist who has audited 500+ executive profiles. 
+    // Professional analysis prompt with JSON response format
+    const analysisPrompt = `You are a senior LinkedIn strategist with 15+ years of experience helping executives optimize their personal brands. Analyze the following LinkedIn profile and assessment responses to provide professional, actionable insights.
 
-PROFILE DATA:
+PROFILE INFORMATION:
 Name: ${profileData.name}
 Role: ${profileData.whatDoYouDo}
 Target Audience: ${profileData.targetAudience}
@@ -310,39 +128,36 @@ Current Headline: "${profileData.headline}"
 Current About Section: "${profileData.aboutSection}"
 
 ASSESSMENT RESPONSES:
-${answers && answers.length > 0 ? answers.map((answer, index) => `${index + 1}. ${answer.question}\nAnswer: ${answer.answer}`).join('\n\n') : 'No assessment responses provided'}
+${answers && answers.length > 0 ? answers.map((answer, index) => `${index + 1}. ${answer.question}\nResponse: ${answer.answer}`).join('\n\n') : 'No assessment responses provided'}
 
-MAIN CHALLENGE: ${openTextAnswer || 'Not specified'}
+PRIMARY CHALLENGE: ${openTextAnswer || 'Not specified'}
 
 CALCULATED SCORE: ${overallScore}/100
 
-Create a comprehensive, hyper-personalized LinkedIn audit report. Use clear section headers and provide specific, actionable insights:
+Please provide a comprehensive LinkedIn audit in JSON format with the following structure. Write in a professional, consultative tone that an executive would expect from a senior strategist:
 
-**1. PROFILE ANALYSIS**
-Analyze their actual headline and about section. Be specific about what's working and what needs immediate improvement. Reference their exact content and provide concrete examples of how to improve it.
+{
+  "profileAnalysis": "Detailed analysis of their current headline and about section with specific improvement recommendations",
+  "questionInsights": "Strategic insights based on their assessment responses, identifying key patterns and opportunities",
+  "personalizedRecommendations": "Specific, actionable recommendations tailored to their role, audience, and goals",
+  "actionPlan": "Clear 30-day implementation plan with weekly milestones and specific tasks",
+  "strengths": ["List of 3-4 current strengths based on their profile and responses"],
+  "improvements": ["List of 3-4 priority improvements they should focus on immediately"]
+}
 
-**2. QUESTION INSIGHTS** 
-Analyze patterns in their responses. Identify their biggest strengths and blind spots based on their answers. Connect their responses to specific strategic recommendations.
-
-**3. PERSONALIZED RECOMMENDATIONS**
-Provide specific, actionable recommendations tailored to their role (${profileData.whatDoYouDo}), target audience (${profileData.targetAudience}), and goal (${profileData.mainLinkedInGoal}). Include specific examples of improved headlines, content hooks, and CTAs.
-
-**4. ACTION PLAN**
-Create a prioritized 30-day implementation plan with specific weekly goals and measurable outcomes.
-
-**STRENGTHS**
-- [List 3-4 specific strengths based on their responses]
-
-**PRIORITY IMPROVEMENTS**  
-- [List 3-4 critical areas they need to address immediately]
-
-Be direct, specific, and actionable. Use their name throughout. Reference their specific content when analyzing. Focus on lead generation and client acquisition for their target audience.`;
+Guidelines:
+- Write in a professional, consultative tone
+- Provide specific, actionable advice
+- Reference their actual content when analyzing
+- Focus on business impact and ROI
+- Avoid overly promotional or sales-heavy language
+- Make recommendations practical and implementable
+- Use executive-level communication style`;
 
     console.log('Making OpenAI API request...');
     
-    // Create timeout controller
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -355,7 +170,7 @@ Be direct, specific, and actionable. Use their name throughout. Reference their 
         messages: [
           {
             role: 'system',
-            content: 'You are an expert LinkedIn strategist who provides detailed, personalized audits for executives and founders. Be specific, actionable, and direct in your analysis. Always use clear section headers and bullet points for easy parsing.'
+            content: 'You are a senior LinkedIn strategist. Provide professional, executive-level analysis in valid JSON format. Ensure all JSON strings are properly escaped and the response is valid JSON.'
           },
           {
             role: 'user',
@@ -363,7 +178,7 @@ Be direct, specific, and actionable. Use their name throughout. Reference their 
           }
         ],
         max_tokens: 1800,
-        temperature: 0.7,
+        temperature: 0.3,
       }),
       signal: controller.signal,
     });
@@ -376,13 +191,13 @@ Be direct, specific, and actionable. Use their name throughout. Reference their 
       
       let errorMessage = 'Failed to generate analysis. ';
       if (response.status === 401) {
-        errorMessage += 'Invalid API key. Please check your OpenAI API key configuration.';
+        errorMessage += 'Invalid API key configuration.';
       } else if (response.status === 429) {
         errorMessage += 'Rate limit exceeded. Please try again in a few minutes.';
       } else if (response.status === 402) {
-        errorMessage += 'Insufficient credits. Please add credits to your OpenAI account.';
+        errorMessage += 'Insufficient OpenAI credits.';
       } else {
-        errorMessage += `OpenAI API error (${response.status}). Please try again.`;
+        errorMessage += `API error (${response.status}). Please try again.`;
       }
       
       return new Response(JSON.stringify({ error: errorMessage }), {
@@ -396,29 +211,83 @@ Be direct, specific, and actionable. Use their name throughout. Reference their 
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
       console.error('Invalid OpenAI response structure:', data);
       return new Response(JSON.stringify({ 
-        error: 'Invalid response from OpenAI. Please try again.' 
+        error: 'Invalid response from analysis service. Please try again.' 
       }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const fullAnalysis = data.choices[0].message.content;
-    console.log('OpenAI API call successful, response received');
+    const rawContent = data.choices[0].message.content;
+    console.log('OpenAI response received');
     
-    // Parse the analysis using improved parsing
-    const parsedAnalysis = parseAnalysisResponse(fullAnalysis, profileData);
+    let analysisResult: AnalysisResponse;
 
-    console.log('Hyper-personalized analysis completed successfully');
+    try {
+      // Try to parse as JSON first
+      analysisResult = JSON.parse(rawContent);
+    } catch (parseError) {
+      console.log('JSON parsing failed, using fallback parsing');
+      
+      // Fallback to professional defaults with personalized elements
+      analysisResult = {
+        profileAnalysis: `Your current LinkedIn presence shows potential but needs strategic optimization to effectively reach ${profileData.targetAudience}. Your headline "${profileData.headline}" contains relevant keywords but could be more outcome-focused. Consider restructuring it to clearly communicate the specific value you provide to ${profileData.targetAudience}. Your about section would benefit from a more strategic narrative that addresses your target audience's key challenges and positions you as the solution provider.`,
+        
+        questionInsights: `Based on your assessment responses, several strategic opportunities emerge. Your current LinkedIn approach shows ${overallScore >= 70 ? 'strong fundamentals with room for optimization' : overallScore >= 50 ? 'solid foundations that need strategic refinement' : 'significant potential for improvement through systematic optimization'}. The key areas requiring immediate attention align with your goal of ${profileData.mainLinkedInGoal}.`,
+        
+        personalizedRecommendations: `For your role as ${profileData.whatDoYouDo}, focus on creating a content strategy that demonstrates subject matter expertise while addressing ${profileData.targetAudience}'s specific pain points. Develop a professional content calendar that balances thought leadership, industry insights, and strategic engagement. Your headline should clearly articulate the transformation you provide, while your about section should follow a problem-solution-credibility structure that resonates with decision-makers.`,
+        
+        actionPlan: `Week 1: Optimize your headline and about section using professional copywriting principles. Week 2: Develop a strategic content calendar with 3-4 high-value posts per week. Week 3: Implement systematic engagement with target prospects and industry leaders. Week 4: Launch refined content strategy and establish performance tracking systems to measure engagement and conversion metrics.`,
+        
+        strengths: [
+          'Clear understanding of target market and business objectives',
+          'Professional background that establishes industry credibility',
+          'Recognition of LinkedIn\'s importance for business development',
+          'Commitment to improving your professional online presence'
+        ],
+        
+        improvements: [
+          'Optimize headline for client-focused, outcome-driven messaging',
+          'Restructure about section to address target audience pain points',
+          'Develop consistent, value-driven content strategy',
+          'Implement systematic prospect engagement and relationship building'
+        ]
+      };
+    }
+
+    // Validate and ensure all fields are properly formatted
+    if (!analysisResult.profileAnalysis || analysisResult.profileAnalysis.length < 50) {
+      analysisResult.profileAnalysis = `Your LinkedIn profile demonstrates professional competence but requires strategic optimization to effectively attract ${profileData.targetAudience}. Focus on restructuring your messaging to clearly communicate the specific outcomes you deliver rather than just describing what you do.`;
+    }
+
+    if (!analysisResult.strengths || analysisResult.strengths.length === 0) {
+      analysisResult.strengths = [
+        'Professional background and industry experience',
+        'Clear understanding of target market needs',
+        'Commitment to LinkedIn optimization',
+        'Strategic approach to business development'
+      ];
+    }
+
+    if (!analysisResult.improvements || analysisResult.improvements.length === 0) {
+      analysisResult.improvements = [
+        'Enhance headline with outcome-focused messaging',
+        'Optimize about section for target audience engagement',
+        'Develop strategic content calendar',
+        'Implement systematic networking approach'
+      ];
+    }
+
+    console.log('Analysis completed successfully');
 
     return new Response(JSON.stringify({
       overallScore,
-      profileAnalysis: parsedAnalysis.profileAnalysis,
-      questionInsights: parsedAnalysis.questionInsights,
-      personalizedRecommendations: parsedAnalysis.personalizedRecommendations,
-      actionPlan: parsedAnalysis.actionPlan,
-      strengths: parsedAnalysis.strengths,
-      improvements: parsedAnalysis.improvements,
+      profileAnalysis: analysisResult.profileAnalysis,
+      questionInsights: analysisResult.questionInsights,
+      personalizedRecommendations: analysisResult.personalizedRecommendations,
+      actionPlan: analysisResult.actionPlan,
+      strengths: analysisResult.strengths.slice(0, 4),
+      improvements: analysisResult.improvements.slice(0, 4),
       name: profileData.name,
       email: profileData.email
     }), {
@@ -426,15 +295,15 @@ Be direct, specific, and actionable. Use their name throughout. Reference their 
     });
 
   } catch (error) {
-    console.error('Error in hyper-personalized-audit function:', error);
+    console.error('Error in audit function:', error);
     
-    let errorMessage = 'Failed to generate personalized audit. ';
+    let errorMessage = 'Failed to generate audit. ';
     if (error.name === 'AbortError') {
       errorMessage += 'Request timed out. Please try again.';
     } else if (error.message?.includes('fetch')) {
-      errorMessage += 'Network error. Please check your connection and try again.';
+      errorMessage += 'Network error. Please check your connection.';
     } else {
-      errorMessage += 'Please try again. If the problem persists, contact support.';
+      errorMessage += 'Please try again or contact support if the issue persists.';
     }
     
     return new Response(JSON.stringify({ error: errorMessage }), {

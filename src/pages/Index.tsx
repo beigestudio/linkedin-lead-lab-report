@@ -37,7 +37,7 @@ const Index = () => {
     setIsAnalyzing(true);
     
     try {
-      console.log('Starting analysis with profile data:', profileData.name);
+      console.log('Starting professional LinkedIn audit for:', profileData.name);
       
       const { data, error } = await supabase.functions.invoke('hyper-personalized-audit', {
         body: {
@@ -48,69 +48,65 @@ const Index = () => {
       });
 
       if (error) {
-        console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Failed to invoke analysis function');
+        console.error('Analysis function error:', error);
+        throw new Error(error.message || 'Failed to generate analysis');
       }
 
       if (!data) {
-        throw new Error('No data received from analysis function');
+        throw new Error('No analysis data received');
       }
 
       if (data.error) {
         throw new Error(data.error);
       }
 
-      console.log('Analysis completed successfully');
+      console.log('Professional audit completed successfully');
       setHyperPersonalizedAnalysis(data);
       setCurrentStep(14);
-      setRetryCount(0); // Reset retry count on success
+      setRetryCount(0);
       
     } catch (error) {
-      console.error('Hyper-personalized analysis error:', error);
+      console.error('Analysis error:', error);
       
-      let errorMessage = "Analysis failed. ";
+      let errorMessage = "Unable to complete analysis. ";
       let variant: "destructive" | "default" = "destructive";
       
       if (error instanceof Error) {
         const errorText = error.message.toLowerCase();
         
         if (errorText.includes('api key')) {
-          errorMessage += "OpenAI API key issue. Please check your configuration.";
+          errorMessage += "Please check your OpenAI API configuration.";
         } else if (errorText.includes('rate limit') || errorText.includes('429')) {
-          errorMessage += "Rate limit exceeded. Please try again in a few minutes.";
+          errorMessage += "Service is temporarily busy. Please try again in a moment.";
+          variant = "default";
         } else if (errorText.includes('credits') || errorText.includes('402')) {
-          errorMessage += "Insufficient OpenAI credits. Please add credits to your account.";
-        } else if (errorText.includes('timeout') || errorText.includes('timed out')) {
+          errorMessage += "Service limit reached. Please contact support.";
+        } else if (errorText.includes('timeout')) {
           errorMessage += "Request timed out. Please try again.";
-        } else if (errorText.includes('network') || errorText.includes('fetch')) {
-          errorMessage += "Network error. Please check your connection.";
+          variant = "default";
+        } else if (errorText.includes('network')) {
+          errorMessage += "Connection issue. Please check your internet connection.";
+          variant = "default";
         } else {
-          errorMessage += error.message;
-        }
-      } else {
-        errorMessage += "Unknown error occurred.";
-      }
-
-      // Add retry suggestion if this isn't a configuration issue
-      if (!errorMessage.includes('API key') && !errorMessage.includes('credits')) {
-        errorMessage += ` (Attempt ${retryCount + 1}/3)`;
-        
-        if (retryCount < 2) {
-          errorMessage += " - Click 'Try Again' to retry.";
+          errorMessage += "Please try again or contact support if the issue persists.";
           variant = "default";
         }
       }
 
+      if (retryCount < 2 && variant === "default") {
+        errorMessage += ` (Attempt ${retryCount + 1}/3)`;
+      }
+
       toast({
-        title: "Analysis Failed",
+        title: "Analysis Error",
         description: errorMessage,
         variant,
-        action: retryCount < 2 && !errorMessage.includes('API key') && !errorMessage.includes('credits') ? (
+        action: retryCount < 2 && variant === "default" ? (
           <button 
             onClick={handleRetry}
-            className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:bg-primary/90"
+            className="bg-primary text-primary-foreground px-4 py-2 rounded text-sm hover:bg-primary/90 transition-colors"
           >
-            Try Again
+            Retry
           </button>
         ) : undefined,
       });
@@ -186,10 +182,10 @@ const Index = () => {
               </div>
             </div>
             <h1 className="text-xl sm:text-3xl lg:text-5xl font-light text-foreground mb-3 sm:mb-4 tracking-tight px-2">
-              LinkedIn Profile <span className="text-primary font-medium">Audit</span>
+              Professional LinkedIn <span className="text-primary font-medium">Audit</span>
             </h1>
             <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-              Transform your personal LinkedIn presence into a client-generating machine with expert guidance
+              Get strategic insights to optimize your LinkedIn presence and accelerate your professional growth
             </p>
           </div>
         </div>
