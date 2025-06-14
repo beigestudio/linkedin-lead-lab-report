@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, User, CheckCircle, TrendingUp, Target, Sparkles, Calendar, ArrowRight } from "lucide-react";
@@ -155,7 +156,7 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
                     {week.week}
                   </h4>
                   <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-                    {week.content.split('\n').filter(line => line.trim()).map((line, lineIndex) => (
+                    {week.content.split('\n').map((line, lineIndex) => (
                       <p key={lineIndex} className="mb-2">
                         {line.trim()}
                       </p>
@@ -220,3 +221,4 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
     </div>
   );
 };
+

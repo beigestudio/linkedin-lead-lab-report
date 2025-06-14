@@ -1,4 +1,5 @@
 
+
 export const parseActionPlan = (actionPlan: string) => {
   // Split by week patterns (Week 1, Week 2, etc. or similar patterns)
   const weekPattern = /(?:Week\s+\d+|WEEK\s+\d+|Week\s+[A-Z][a-z]+)[\s:]*(?:\n|$)/gi;
@@ -29,3 +30,4 @@ export const parseActionPlan = (actionPlan: string) => {
     };
   });
 };
+
