@@ -1,8 +1,6 @@
-
 export interface ProfileData {
   name: string;
   email: string;
-  linkedinProfile: string;
   whatDoYouDo: string;
   targetAudience: string;
   mainLinkedInGoal: string;

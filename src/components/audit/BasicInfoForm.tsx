@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, Mail, Link, Briefcase, UserCheck, Star, ChevronRight } from "lucide-react";
+import { User, Mail, Briefcase, UserCheck, Star, ChevronRight } from "lucide-react";
 import { ProfileData } from "@/types/audit";
 import { useToast } from "@/hooks/use-toast";
 
@@ -17,7 +17,7 @@ export const BasicInfoForm = ({ profileData, onDataChange, onNext }: BasicInfoFo
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profileData.name || !profileData.email || !profileData.linkedinProfile || !profileData.whatDoYouDo || !profileData.targetAudience || !profileData.mainLinkedInGoal) {
+    if (!profileData.name || !profileData.email || !profileData.whatDoYouDo || !profileData.targetAudience || !profileData.mainLinkedInGoal) {
       toast({
         title: "Missing information",
         description: "Please fill in all fields.",
@@ -73,21 +73,6 @@ export const BasicInfoForm = ({ profileData, onDataChange, onNext }: BasicInfoFo
                 required
               />
             </div>
-          </div>
-          
-          <div>
-            <label className="block text-foreground mb-2 sm:mb-3 font-medium flex items-center text-sm">
-              <Link className="h-4 w-4 mr-2 text-primary" />
-              LinkedIn Profile URL
-            </label>
-            <Input
-              type="text"
-              placeholder="linkedin.com/in/yourname or www.linkedin.com/in/yourname"
-              value={profileData.linkedinProfile}
-              onChange={(e) => onDataChange({ ...profileData, linkedinProfile: e.target.value })}
-              className="h-12 sm:h-14 text-sm sm:text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all touch-manipulation"
-              required
-            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
