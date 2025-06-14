@@ -25,23 +25,19 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-progress', '@radix-ui/react-toast'],
+          vendor: ['react', 'react-dom'],
           supabase: ['@supabase/supabase-js'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-progress', '@radix-ui/react-toast'],
           utils: ['class-variance-authority', 'clsx', 'tailwind-merge']
         }
       }
     },
-    // Enable compression
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    },
+    // Use esbuild for minification (faster than terser and included with Vite)
+    minify: 'esbuild',
     // Optimize chunk size
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 500,
+    // Enable source maps in development
+    sourcemap: mode === 'development'
   },
   // Enable tree shaking
   optimizeDeps: {
