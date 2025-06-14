@@ -180,7 +180,7 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
           <Button 
             size={isMobile ? "default" : "lg"}
             className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all group"
-            onClick={() => window.open('https://calendly.com/your-calendar-link', '_blank')}
+            onClick={() => window.open('https://calendar.app.google/SWZoyjMHZZALNwqz7', '_blank')}
           >
             <Calendar className="mr-3 h-5 w-5" />
             Schedule Strategy Session
