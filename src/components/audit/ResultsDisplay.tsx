@@ -1,9 +1,9 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, User, CheckCircle, TrendingUp, Target, Sparkles, Calendar, ArrowRight } from "lucide-react";
 import { HyperPersonalizedAnalysis } from "@/types/audit";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { parseActionPlan } from "@/lib/actionPlanParser";
 
 interface ResultsDisplayProps {
   analysis: HyperPersonalizedAnalysis;
@@ -11,6 +11,7 @@ interface ResultsDisplayProps {
 
 export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
   const isMobile = useIsMobile();
+  const parsedActionPlan = parseActionPlan(analysis.actionPlan);
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-700";
@@ -147,8 +148,21 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-              {analysis.actionPlan}
+            <div className="space-y-6">
+              {parsedActionPlan.map((week, index) => (
+                <div key={index} className="border-l-4 border-orange-400 pl-6 pb-4">
+                  <h4 className="text-lg font-semibold text-orange-800 mb-3">
+                    {week.week}
+                  </h4>
+                  <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
+                    {week.content.split('\n').map((line, lineIndex) => (
+                      <p key={lineIndex} className="mb-2">
+                        {line.trim()}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
