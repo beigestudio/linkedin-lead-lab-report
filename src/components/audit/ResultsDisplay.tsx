@@ -1,33 +1,28 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, User, CheckCircle, TrendingUp, Target, Sparkles, Calendar, ArrowRight } from "lucide-react";
 import { HyperPersonalizedAnalysis } from "@/types/audit";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { parseActionPlan } from "@/lib/actionPlanParser";
-
 interface ResultsDisplayProps {
   analysis: HyperPersonalizedAnalysis;
 }
-
-export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
+export const ResultsDisplay = ({
+  analysis
+}: ResultsDisplayProps) => {
   const isMobile = useIsMobile();
   const parsedActionPlan = parseActionPlan(analysis.actionPlan);
-
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-700";
     if (score >= 60) return "text-yellow-700";
     return "text-orange-700";
   };
-
   const getScoreDescription = (score: number) => {
     if (score >= 80) return "Excellent Foundation";
     if (score >= 60) return "Good Potential";
     return "Significant Opportunity";
   };
-
-  return (
-    <div className="space-y-6 sm:space-y-8">
+  return <div className="space-y-6 sm:space-y-8">
       {/* Score Overview */}
       <Card className="max-w-6xl mx-auto border shadow-xl bg-white">
         <CardHeader className="text-center pb-4 sm:pb-6">
@@ -80,12 +75,10 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                {analysis.strengths.map((strength, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                {analysis.strengths.map((strength, index) => <li key={index} className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></div>
                     <span className="text-green-900 leading-relaxed font-medium">{strength}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </CardContent>
           </Card>
@@ -99,12 +92,10 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                {analysis.improvements.map((improvement, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                {analysis.improvements.map((improvement, index) => <li key={index} className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
                     <span className="text-blue-900 leading-relaxed font-medium">{improvement}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </CardContent>
           </Card>
@@ -150,20 +141,14 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-              {parsedActionPlan.map((week, index) => (
-                <div key={index} className="border-l-4 border-orange-400 pl-6 pb-4">
-                  <h4 className="text-lg font-semibold text-orange-800 mb-3">
-                    {week.week}
-                  </h4>
+              {parsedActionPlan.map((week, index) => <div key={index} className="border-l-4 border-orange-400 pl-6 pb-4">
+                  
                   <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-                    {week.content.split('\n').map((line, lineIndex) => (
-                      <p key={lineIndex} className="mb-2">
+                    {week.content.split('\n').map((line, lineIndex) => <p key={lineIndex} className="mb-2">
                         {line.trim()}
-                      </p>
-                    ))}
+                      </p>)}
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </CardContent>
         </Card>
@@ -192,11 +177,7 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
             </p>
           </div>
           
-          <Button 
-            size={isMobile ? "default" : "lg"}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all group"
-            onClick={() => window.open('https://calendar.app.google/SWZoyjMHZZALNwqz7', '_blank')}
-          >
+          <Button size={isMobile ? "default" : "lg"} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all group" onClick={() => window.open('https://calendar.app.google/SWZoyjMHZZALNwqz7', '_blank')}>
             <Calendar className="mr-3 h-5 w-5" />
             Schedule Strategy Session
             <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -218,7 +199,5 @@ export const ResultsDisplay = ({ analysis }: ResultsDisplayProps) => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
