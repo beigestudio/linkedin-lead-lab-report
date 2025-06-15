@@ -1,4 +1,3 @@
-
 import { Resend } from "npm:resend@2.0.0";
 import { ProfileData, AnalysisResponse } from './types.ts';
 
@@ -98,6 +97,11 @@ export const createEmailHtml = (
         ✨ Recommended Actions
       </h2>
       <div style="background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%); border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+        <div style="background: rgba(255, 255, 255, 0.7); border-radius: 6px; padding: 12px; margin-bottom: 15px; border-left: 3px solid #2563eb;">
+          <p style="margin: 0; font-size: 14px; color: #1e40af; font-style: italic;">
+            📧 This personalized analysis has been sent to your email: <strong>${profileData.email}</strong> for your reference.
+          </p>
+        </div>
         <p style="margin: 0; line-height: 1.7; color: #1f2937 !important;">${analysisResult.personalizedRecommendations}</p>
       </div>
     </div>
