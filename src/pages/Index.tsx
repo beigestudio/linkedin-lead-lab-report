@@ -244,7 +244,7 @@ const Index = () => {
         )}
 
         {/* Analysis Loading */}
-        {currentStep === 13 && <LoadingStep />}
+        {currentStep === 13 && <LoadingStep email={profileData.email} />}
 
         {/* Results Display */}
         {currentStep === 14 && hyperPersonalizedAnalysis && (

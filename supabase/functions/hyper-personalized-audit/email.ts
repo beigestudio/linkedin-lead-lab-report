@@ -97,11 +97,6 @@ export const createEmailHtml = (
         ✨ Recommended Actions
       </h2>
       <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
-        <div style="background: #eff6ff; border-radius: 6px; padding: 12px; margin-bottom: 15px; border-left: 3px solid #2563eb;">
-          <p style="margin: 0; font-size: 14px; color: #1e40af; font-style: italic;">
-            📧 This personalized analysis has been sent to your email: <strong>${profileData.email}</strong> for your reference.
-          </p>
-        </div>
         <p style="margin: 0; line-height: 1.7; color: #1f2937 !important;">${analysisResult.personalizedRecommendations}</p>
       </div>
     </div>
