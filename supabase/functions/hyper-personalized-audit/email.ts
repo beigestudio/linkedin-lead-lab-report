@@ -25,9 +25,17 @@ export const createEmailHtml = (
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
     <title>Your LinkedIn Audit Results</title>
+    <style>
+      @media (prefers-color-scheme: dark) {
+        .email-container { background-color: #ffffff !important; }
+        .email-content { color: #1f2937 !important; }
+      }
+    </style>
   </head>
-  <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #374151; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <body class="email-container" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #374151; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
     
     <div style="text-align: center; margin-bottom: 40px;">
       <h1 style="color: #1f2937; font-size: 28px; font-weight: 300; margin-bottom: 10px;">Your LinkedIn Audit Results</h1>
@@ -48,7 +56,7 @@ export const createEmailHtml = (
         👤 Profile Analysis
       </h2>
       <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
-        <p style="margin: 0; line-height: 1.7;">${analysisResult.profileAnalysis}</p>
+        <p style="margin: 0; line-height: 1.7; color: #1f2937;">${analysisResult.profileAnalysis}</p>
       </div>
     </div>
 
@@ -81,7 +89,7 @@ export const createEmailHtml = (
         🎯 Strategic Insights
       </h2>
       <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
-        <p style="margin: 0; line-height: 1.7;">${analysisResult.questionInsights}</p>
+        <p style="margin: 0; line-height: 1.7; color: #1f2937;">${analysisResult.questionInsights}</p>
       </div>
     </div>
 
@@ -90,7 +98,7 @@ export const createEmailHtml = (
         ✨ Recommended Actions
       </h2>
       <div style="background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%); border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
-        <p style="margin: 0; line-height: 1.7;">${analysisResult.personalizedRecommendations}</p>
+        <p style="margin: 0; line-height: 1.7; color: #1f2937 !important;">${analysisResult.personalizedRecommendations}</p>
       </div>
     </div>
 
@@ -115,8 +123,8 @@ export const createEmailHtml = (
     </div>
 
     <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
-      <p>Thank you for using our LinkedIn Audit tool!</p>
-      <p style="margin: 0;">This analysis was generated specifically for ${profileData.name}</p>
+      <p style="color: #6b7280;">Thank you for using our LinkedIn Audit tool!</p>
+      <p style="margin: 0; color: #6b7280;">This analysis was generated specifically for ${profileData.name}</p>
     </div>
 
   </body>
