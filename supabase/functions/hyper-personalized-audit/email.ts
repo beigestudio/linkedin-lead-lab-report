@@ -96,8 +96,8 @@ export const createEmailHtml = (
       <h2 style="color: #1e40af; font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center;">
         ✨ Recommended Actions
       </h2>
-      <div style="background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%); border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
-        <div style="background: rgba(255, 255, 255, 0.7); border-radius: 6px; padding: 12px; margin-bottom: 15px; border-left: 3px solid #2563eb;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+        <div style="background: #eff6ff; border-radius: 6px; padding: 12px; margin-bottom: 15px; border-left: 3px solid #2563eb;">
           <p style="margin: 0; font-size: 14px; color: #1e40af; font-style: italic;">
             📧 This personalized analysis has been sent to your email: <strong>${profileData.email}</strong> for your reference.
           </p>
