@@ -1,27 +1,31 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star, User, CheckCircle, TrendingUp, Target, Sparkles, Calendar, ArrowRight } from "lucide-react";
+import { Star, User, CheckCircle, TrendingUp, Target, Sparkles, ArrowRight } from "lucide-react";
 import { HyperPersonalizedAnalysis } from "@/types/audit";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { parseActionPlan } from "@/lib/actionPlanParser";
+
 interface ResultsDisplayProps {
   analysis: HyperPersonalizedAnalysis;
 }
+
 export const ResultsDisplay = ({
   analysis
 }: ResultsDisplayProps) => {
   const isMobile = useIsMobile();
-  const parsedActionPlan = parseActionPlan(analysis.actionPlan);
+
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-700";
     if (score >= 60) return "text-yellow-700";
     return "text-orange-700";
   };
+
   const getScoreDescription = (score: number) => {
     if (score >= 80) return "Excellent Foundation";
     if (score >= 60) return "Good Potential";
     return "Significant Opportunity";
   };
+
   return <div className="space-y-6 sm:space-y-8">
       {/* Score Overview */}
       <Card className="max-w-6xl mx-auto border shadow-xl bg-white">
@@ -130,28 +134,6 @@ export const ResultsDisplay = ({
             </div>
           </CardContent>
         </Card>
-
-        {/* 30-Day Action Plan */}
-        <Card className="border shadow-lg bg-gradient-to-br from-orange-50 to-yellow-50">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl sm:text-2xl font-semibold flex items-center text-orange-700">
-              <Calendar className="h-5 w-5 sm:h-6 sm:w-6 mr-3" />
-              30-Day Implementation Plan
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              {parsedActionPlan.map((week, index) => <div key={index} className="border-l-4 border-orange-400 pl-6 pb-4">
-                  
-                  <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-                    {week.content.split('\n').map((line, lineIndex) => <p key={lineIndex} className="mb-2">
-                        {line.trim()}
-                      </p>)}
-                  </div>
-                </div>)}
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Professional CTA */}
@@ -178,7 +160,7 @@ export const ResultsDisplay = ({
           </div>
           
           <Button size={isMobile ? "default" : "lg"} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all group" onClick={() => window.open('https://calendar.app.google/SWZoyjMHZZALNwqz7', '_blank')}>
-            <Calendar className="mr-3 h-5 w-5" />
+            <Sparkles className="mr-3 h-5 w-5" />
             Schedule Strategy Session
             <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
