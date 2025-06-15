@@ -5,6 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { User, Mail, Briefcase, UserCheck, Star, ChevronRight, Info } from "lucide-react";
 import { ProfileData } from "@/types/audit";
 import { useToast } from "@/hooks/use-toast";
+
 interface BasicInfoFormProps {
   profileData: ProfileData;
   onDataChange: (data: ProfileData) => void;
@@ -65,7 +66,10 @@ export const BasicInfoForm = ({
               ...profileData,
               email: e.target.value
             })} className="h-12 sm:h-14 text-sm sm:text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all touch-manipulation" required />
-              
+              <p className="text-xs text-muted-foreground mt-2 flex items-center">
+                <Info className="h-3 w-3 mr-1" />
+                Please use your correct email - audit results will be sent here
+              </p>
             </div>
           </div>
 
