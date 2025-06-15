@@ -122,7 +122,7 @@ export const WelcomeStep = memo(({
               Start My Free LinkedIn Audit
               <ChevronRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6" />
             </Button>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-6">✨ Takes 2 minutes • Get hyper-personalized expert feedback</p>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-6">✨ Takes 5 minutes • Get hyper-personalized expert feedback</p>
           </div>
         </CardContent>
       </Card>
