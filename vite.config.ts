@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimize bundle splitting
+    // Optimize bundle splitting for mobile
     rollupOptions: {
       output: {
         manualChunks: {
@@ -32,14 +32,16 @@ export default defineConfig(({ mode }) => ({
         }
       }
     },
-    // Use esbuild for minification (faster than terser and included with Vite)
+    // Use esbuild for faster builds
     minify: 'esbuild',
-    // Optimize chunk size
-    chunkSizeWarningLimit: 500,
-    // Enable source maps in development
-    sourcemap: mode === 'development'
+    // Optimize chunk size for mobile networks
+    chunkSizeWarningLimit: 300,
+    // Enable source maps only in development
+    sourcemap: mode === 'development',
+    // Target modern browsers for smaller bundles
+    target: 'es2015'
   },
-  // Enable tree shaking
+  // Enable tree shaking and optimize for mobile
   optimizeDeps: {
     include: ['react', 'react-dom', '@supabase/supabase-js'],
     exclude: ['lucide-react']

@@ -52,19 +52,30 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Mobile-first base font size */
+    font-size: 16px;
   }
 
-  /* Mobile input optimization - prevent zoom */
+  /* Mobile input optimization - prevent zoom and improve UX */
   input, textarea, select {
     font-size: 16px !important;
     -webkit-appearance: none;
     border-radius: 0;
+    /* Improved touch targets for mobile */
+    min-height: 44px;
+    padding: 12px 16px;
   }
 
-  /* Touch optimization */
+  /* Enhanced touch optimization */
   * {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Better button touch targets for mobile */
+  button {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
@@ -72,21 +83,41 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
   will-change: transform;
+  transform: translateZ(0); /* GPU acceleration */
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0px) translateZ(0); }
+  50% { transform: translateY(-10px) translateZ(0); }
 }
 
-/* Gradient background */
+/* Fade in animation for mobile performance */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gradient background - optimized for mobile */
 .gradient-bg {
   background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+  /* Prevent background attachment issues on mobile */
+  background-attachment: scroll;
 }
 
-/* Modern scrollbar */
+/* Modern scrollbar - mobile friendly */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px; /* Thinner for mobile */
 }
 
 ::-webkit-scrollbar-track {
@@ -95,7 +126,7 @@
 
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--primary));
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -113,23 +144,46 @@
 
   /* Safe area padding for devices with notches */
   .safe-area-top {
-    padding-top: env(safe-area-inset-top);
+    padding-top: max(env(safe-area-inset-top), 16px);
   }
   
   .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: max(env(safe-area-inset-bottom), 16px);
   }
 
   /* GPU acceleration for smooth animations */
   .gpu-accelerated {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Mobile-first responsive text sizes */
+  .text-responsive-sm {
+    @apply text-sm;
+  }
+  
+  .text-responsive-base {
+    @apply text-base;
+  }
+  
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl;
+  }
+  
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
   }
 }
 
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .animate-float {
+  .animate-float,
+  .animate-fade-in {
     animation: none;
   }
   
@@ -144,20 +198,27 @@
 }
 
 /* Mobile-specific optimizations */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 640px) {
   .animate-float {
     animation: float 8s ease-in-out infinite;
   }
   
-  /* Prevent zoom on focus */
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="password"],
-  textarea {
-    font-size: 16px !important;
-    transform: scale(1);
-    transition: none;
+  /* Larger touch targets for small screens */
+  button, input, select, textarea {
+    min-height: 48px;
+  }
+  
+  /* Better spacing for mobile */
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* Tablet optimizations */
+@media screen and (min-width: 641px) and (max-width: 1024px) {
+  body {
+    font-size: 17px;
   }
 }
 
@@ -174,4 +235,25 @@
   :root {
     color-scheme: dark;
   }
+}
+
+/* Focus improvements for accessibility */
+:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Loading state optimization */
+.loading-shimmer {
+  background: linear-gradient(90deg, 
+    hsl(var(--muted)) 0%, 
+    hsl(var(--muted-foreground) / 0.1) 50%, 
+    hsl(var(--muted)) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
