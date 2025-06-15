@@ -1,8 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, Mail, Briefcase, UserCheck, Star, ChevronRight } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { User, Mail, Briefcase, UserCheck, Star, ChevronRight, Info } from "lucide-react";
 import { ProfileData } from "@/types/audit";
 import { useToast } from "@/hooks/use-toast";
 
@@ -72,6 +72,12 @@ export const BasicInfoForm = ({ profileData, onDataChange, onNext }: BasicInfoFo
                 className="h-12 sm:h-14 text-sm sm:text-base rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background transition-all touch-manipulation"
                 required
               />
+              <Alert className="mt-3 border-blue-200 bg-blue-50/50 backdrop-blur-sm">
+                <Info className="h-4 w-4 text-blue-600" />
+                <AlertDescription className="text-blue-700 text-sm">
+                  💡 Please ensure this email is correct - your personalized LinkedIn audit results will be sent here!
+                </AlertDescription>
+              </Alert>
             </div>
           </div>
 
