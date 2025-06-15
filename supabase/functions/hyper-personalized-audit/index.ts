@@ -417,7 +417,7 @@ Guidelines:
         `;
 
         await resend.emails.send({
-          from: 'LinkedIn Audit <noreply@resend.dev>',
+          from: 'LinkedIn Audit <hello@beigestudio.co>',
           to: [profileData.email],
           subject: `Your LinkedIn Audit Results - ${overallScore}/100 Score`,
           html: emailHtml,
